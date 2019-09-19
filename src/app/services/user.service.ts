@@ -45,7 +45,7 @@ export class UserService {
         console.log(Constants.SIGN_UP_SUCCESSFUL);
         this.router.navigateByUrl(Constants.URL_ADMIN_HOME);
         return this.firestore.doc(`users/${id}`).set({
-          username:user.username,
+          username: user.username,
           email: user.email,
           name: user.name,
           password: user.password,
@@ -62,29 +62,29 @@ export class UserService {
 
   }
 
-login(user:User){
+  login(user: User) {
 
-   this.firestore.doc(`users/${user.username}`).get({
-    source:'server'
-  }).subscribe(data=>{
-    if(data.exists){
-      //user ok
-      //console.log(data.id); <-- works!
+    this.firestore.doc(`users/${user.username}`).get({
+      source: 'server'
+    }).subscribe(data => {
+      if (data.exists) {
+        //user ok
+        //console.log(data.id); <-- works!
 
-      
-      
-    }else{
-      console.log('No User!');
-      
-    }
-  })
 
-  
 
-  
-  
-  
-}
+      } else {
+        console.log('No User!');
+
+      }
+    })
+
+
+
+
+
+
+  }
 
 
 
