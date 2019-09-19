@@ -1,5 +1,5 @@
 
-export class User{
+export interface User{
     username:string;
     type:string;
     email:string;
