@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators,Form } from '@angular/forms';
+import { FormGroup, FormBuilder,FormControl, Validators,Form } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
-import { User } from 'src/app/models/user';
 import { Constants } from 'src/app/constants/constants';
 
 @Component({
@@ -20,10 +19,11 @@ export class SignInPage implements OnInit {
      public router: Router,
      formBuilder: FormBuilder
    ) {
-     this.userLoginForm = formBuilder.group({
-       username: ['', Validators.required],
-       password: ['', Validators.required]
-     });
+     this.userLoginForm =new FormGroup({
+      email: new FormControl('',  Validators.required),
+      password: new FormControl('',  Validators.required),
+     
+    }); 
    }
 
    ngOnInit(): void {
@@ -31,16 +31,9 @@ export class SignInPage implements OnInit {
    }
  
  
-   userLogin() {
-     const user: User = {
-       username: this.userLoginForm.value.username,
-       name: null,
-       email: null,
-       password: this.userLoginForm.value.password,
-       type: Constants.USER_TYPE_ADMIN,
-       photoUrl: ''
-     }
-     this.userService.login(user)
+   userLogin(formData: FormData) {
+    
+     this.userService.login(formData["email"],formData["password"])
  
    }
 }

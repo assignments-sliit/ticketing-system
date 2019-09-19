@@ -53,24 +53,19 @@ export class SignUpPage implements OnInit {
       name: this.createUserForm.value.name,
       email: this.createUserForm.value.email,
       password: this.createUserForm.value.password,
-      type: Constants.USER_TYPE_ADMIN,
+      type: Constants.USER_TYPE_USER,
       photoUrl: ''
     }
+    this.userService.signUp(user);
+  }
+
 
 
     //send data to the service
 
-    this.userService.createUser(user).then(() => {
-      loading.dismiss().then(() => {
-      });
-    },
-      error => {
-        console.error(error);
+    
 
-      }
-    );
-
-    return await loading.present();
+    
 
 
   }
@@ -78,4 +73,4 @@ export class SignUpPage implements OnInit {
 
 
 
-}
+

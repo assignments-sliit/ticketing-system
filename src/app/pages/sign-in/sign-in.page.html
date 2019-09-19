@@ -5,12 +5,12 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="userLoginForm" (submit)="userLogin()">
+  <form [formGroup]="userLoginForm" (ngSubmit)="userLogin(userLoginForm.value)">
     <ion-item>
       <ion-label stacked>
         Username
       </ion-label>
-      <ion-input formControlName="username" type="text" placeholder="Your Username">
+      <ion-input formControlName="email" type="email" placeholder="Your Username">
 
       </ion-input>
     </ion-item>

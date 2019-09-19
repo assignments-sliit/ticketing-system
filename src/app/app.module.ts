@@ -12,10 +12,10 @@ import { AppRoutingModule } from './app-routing.module';
 //firebase imports
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { firebaseConfig } from "./credentials";
+import  firebaseConfig  from "./credentials";
 import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import{ AngularFireAuthModule} from '@angular/fire/auth'; 
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,8 +24,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
+    AngularFireAuthModule,
     FormsModule,
     ReactiveFormsModule
   ],

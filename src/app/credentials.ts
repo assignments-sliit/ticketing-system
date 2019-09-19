@@ -1,4 +1,4 @@
-export var firebaseConfig:{
+ const  firebaseConfig={
     apiKey: "AIzaSyA7sy5pFt1RSKBAPBdkDVV4Vlrv2JxnOww",
     authDomain: "ticketing-system-bcaaa.firebaseapp.com",
     databaseURL: "https://ticketing-system-bcaaa.firebaseio.com",
@@ -7,3 +7,5 @@ export var firebaseConfig:{
     messagingSenderId: "778089559997",
     appId: "1:778089559997:web:675dbc0153f9b39f7844d4"
   }
+
+  export default firebaseConfig;
