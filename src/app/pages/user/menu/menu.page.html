@@ -1,0 +1,33 @@
+<ion-split-pane >
+  <ion-menu contentId="content" >
+    <ion-header>
+      
+    </ion-header>
+    <ion-content >
+      <div class="profile">
+        <div class="profile-img">
+          <img src=''/>
+          <ion-title class="list-color"></ion-title>
+        </div>
+        
+
+      </div>
+       <ion-list noi-line >
+         <ion-menu-toggle auto-hide="false" *ngFor="let p of pages" >
+            <ion-item  lines="none" [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath===p.url" class="list-color">
+                <ion-icon [name]="p.icon" class="list-color" item-start></ion-icon> 
+              {{p.title}} 
+              
+            </ion-item>
+            
+         </ion-menu-toggle>
+        
+         <ion-button (click)="logout()"> <ion-icon name='md-home' class="list-color"></ion-icon></ion-button>
+       </ion-list>
+    </ion-content>
+  </ion-menu>
+  
+
+  <ion-router-outlet id="content" main></ion-router-outlet>
+   
+</ion-split-pane>

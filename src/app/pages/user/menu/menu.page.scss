@@ -1,0 +1,37 @@
+.active-item{
+    border-left:8px solid var(--ion-color-primary)
+}
+
+ion-content{
+
+   --ion-background-color:#4A4A4A;
+   
+}
+
+.list-color{
+
+    color:#fff;
+    background-color: transparent !important;
+    
+}
+.profile{
+    position: relative;
+    height:180px;
+    background-image: url();
+    
+}
+.profile-img{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+
+}
+
+.profile-img img{
+    height: 90px;
+    width: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: white;
+}
