@@ -81,7 +81,7 @@ export class UserService {
             //setUserStatus
             this.setUserStatus(this.currentUser)
             if(userRef.data().role !== "admin") {
-              this.router.navigate(["/user-home"]);
+              this.router.navigate(["/menu"]);
             }else{
               this.router.navigate(["/admin-home"]);
             }
@@ -118,7 +118,7 @@ export class UserService {
             console.log(this.userStatus)
             
             if(userRef.data().role !== "admin") {
-             this.ngZone.run(() => this.router.navigate(["/user-home"]));
+             this.ngZone.run(() => this.router.navigate(["/menu"]));
             }else{
              this.ngZone.run(() => this.router.navigate(["/admin"])); 
             }
@@ -128,7 +128,7 @@ export class UserService {
         //this is the error you where looking at the video that I wasn't able to fix
         //the function is running on refresh so its checking if the user is logged in or not
         //hence the redirect to the login
-        this.ngZone.run(() => this.router.navigate(["/login"]));
+        this.ngZone.run(() => this.router.navigate(["/sign-in"]));
       }
     })
   }
