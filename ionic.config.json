@@ -1,5 +1,8 @@
 {
   "name": "ticketing-system",
-  "integrations": {},
-  "type": "angular"
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "e28b2f15"
 }

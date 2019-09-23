@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Constants } from '../../constants/constants';
 
 @Component({
   selector: 'app-admin-home',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminHomePage implements OnInit {
 
+  adminHomeTitle:String=Constants.ADMIN_HOME_TITLE;
   constructor() { }
 
   ngOnInit() {

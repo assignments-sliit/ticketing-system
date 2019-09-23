@@ -1,10 +1,10 @@
-import { Injectable,NgZone } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { User } from '../models/user';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { Observable,BehaviorSubject  } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { loadingController } from '@ionic/core';
 import { Constants } from '../constants/constants';
 
@@ -12,12 +12,12 @@ import { Constants } from '../constants/constants';
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private ngZone: NgZone, private afAuth: AngularFireAuth, private firestore: AngularFirestore , private router: Router) { }
+  constructor(private ngZone: NgZone, private afAuth: AngularFireAuth, private firestore: AngularFirestore, private router: Router, public loadingCtrl: LoadingController) { }
 
   public currentUser: any;
   public userStatus: string;
   public userStatusChanges: BehaviorSubject<string> = new BehaviorSubject<string>(this.userStatus);
-  
+
 
   setUserStatus(userStatus: any): void {
     this.userStatus = userStatus;
@@ -25,106 +25,110 @@ export class UserService {
   }
 
 
-  signUp(users:User){
-    
-    const email=users.email
-    const password=users.password
-    
+  signUp(users: User) {
+
+    const email = users.email
+    const password = users.password
+
     this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-     .then((userResponse)=>{
-       // add the user to the "users" database
-       let user = {
-        id: userResponse.user.uid,
-        email: userResponse.user.email,
-        role: users.type,
-        username:users.username,
-        name:users.name
-        
-       }
-       
-      
+      .then((userResponse) => {
+        // add the user to the "users" database
+        let user = {
+          id: userResponse.user.uid,
+          email: userResponse.user.email,
+          role: users.type,
+          username: users.username,
+          name: users.name
 
-       //add the user to the database
-       this.firestore.collection("users").add(user)
-       .then(user => {
-        user.get().then(x => {
-          //return the user data
-          console.log(x.data());
-          this.currentUser = x.data();
-          this.setUserStatus(this.currentUser);
-          this.router.navigate(["/sign-in"]);
-        })
-       }).catch(err => {
-         console.log(err);
-       })
-       
-      
-     })
-     .catch((err)=>{
-        console.log("An error ocurred: ", err);
-     })
- 
-    }
+        }
 
 
-    //login with mail and password 
-   
-    login(email: string, password: string) {
-        //check mail and password 
-      this.afAuth.auth.signInWithEmailAndPassword(email, password)
-      .then((user)=>{
+
+        //add the user to the database
+        this.firestore.collection("users").add(user)
+          .then(user => {
+            user.get().then(x => {
+              //return the user data
+              console.log(x.data());
+              this.currentUser = x.data();
+              this.setUserStatus(this.currentUser);
+              this.router.navigate(["/sign-in"]);
+            })
+          }).catch(err => {
+            console.log(err);
+          })
+
+
+      })
+      .catch((err) => {
+        console.log(Constants.UNKNOWN_ERROR_WITH_PARAMETER, err);
+      })
+
+  }
+
+
+  //login with mail and password 
+
+  async login(email: string, password: string) {
+    //check mail and password 
+    const loading=this.loadingCtrl.create();
+    this.afAuth.auth.signInWithEmailAndPassword(email, password)
+      .then((user) => {
         //check role admin or user 
-        this.firestore.collection("users").ref.where("email", "==", user.user.email).onSnapshot(snap =>{
+        
+        this.firestore.collection("users").ref.where("email", "==", user.user.email).onSnapshot(snap => {
           snap.forEach(userRef => {
             console.log("userRef", userRef.data());
             this.currentUser = userRef.data();
             //setUserStatus
             this.setUserStatus(this.currentUser)
-            if(userRef.data().role !== "admin") {
+            if (userRef.data().role !== "admin") {
               this.router.navigate(["/menu"]);
-            }else{
+            } else {
               this.router.navigate(["/admin-home"]);
             }
           })
         })
-       
+
       }).catch(err => err)
+
+      return 0;
+
   }
 
-  logOut(){
+  logOut() {
     this.afAuth.auth.signOut()
-    .then(()=>{
-      console.log("user signed Out successfully");
-      //set current user to null to be logged out
-      this.currentUser = null;
-      //set the listenener to be null, for the UI to react
-      this.setUserStatus(null);
-      this.ngZone.run(() => this.router.navigate(["/sign-in"]));
+      .then(() => {
+        console.log(Constants.SIGN_OUT_SUCCESSFUL);
+        //set current user to null to be logged out
+        this.currentUser = null;
+        //set the listenener to be null, for the UI to react
+        this.setUserStatus(null);
+        this.ngZone.run(() => this.router.navigate(["/sign-in"]));
 
-    }).catch((err) => {
-      console.log(err);
-    })
+      }).catch((err) => {
+        console.log(err);
+      })
   }
 
 
-  userChanges(){
+  userChanges() {
     this.afAuth.auth.onAuthStateChanged(currentUser => {
-      if(currentUser){
-        this.firestore.collection("users").ref.where("email", "==", currentUser.email).onSnapshot(snap =>{
+      if (currentUser) {
+        this.firestore.collection("users").ref.where("email", "==", currentUser.email).onSnapshot(snap => {
           snap.forEach(userRef => {
             this.currentUser = userRef.data();
             //setUserStatus
             this.setUserStatus(this.currentUser);
             console.log(this.userStatus)
-            
-            if(userRef.data().role !== "admin") {
-             this.ngZone.run(() => this.router.navigate(["/menu"]));
-            }else{
-             this.ngZone.run(() => this.router.navigate(["/admin"])); 
+            if (userRef.data().role !== "admin") {
+              this.ngZone.run(() => this.router.navigate(["/menu"]));
+            } else {
+              this.ngZone.run(() => this.router.navigate(["/admin"]));
             }
           })
         })
-      }else{
+      } else {
         //this is the error you where looking at the video that I wasn't able to fix
         //the function is running on refresh so its checking if the user is logged in or not
         //hence the redirect to the login
@@ -132,10 +136,10 @@ export class UserService {
       }
     })
   }
-  
-  
-  
-  }
+
+
+
+}
 
 
 
