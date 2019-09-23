@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
 import { UserService } from "../../../services/user.service";
+import { Constants } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-menu',
@@ -11,7 +12,7 @@ export class MenuPage implements OnInit {
 
   pages =[
     {
-      title:'Profile',
+      title:Constants.PROFILE,
       url:'/menu/profile',
       icon:'md-person'
     },

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Constants } from 'src/app/constants/constants';
 
 @Component({
   selector: 'app-view-time-table',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewTimeTablePage implements OnInit {
 
+  viewTitmeTableTitle: String = Constants.VIEW_TIME_TABLE_HOME_TITILE;
   constructor() { }
 
   ngOnInit() {
