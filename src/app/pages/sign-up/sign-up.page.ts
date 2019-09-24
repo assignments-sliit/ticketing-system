@@ -25,7 +25,7 @@ export class SignUpPage implements OnInit {
   ) {
     this.createUserForm = formbuilder.group({
       username: ['', Validators.required],
-      name: ['', Validators.required],
+      phone: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required]
     });
@@ -49,9 +49,9 @@ export class SignUpPage implements OnInit {
     const loading = await this.loadingCtrl.create();
 
     const user: User = {
-      username: this.createUserForm.value.username,
-      name: this.createUserForm.value.name,
+      name: this.createUserForm.value.username,
       email: this.createUserForm.value.email,
+      phone: this.createUserForm.value.phone,
       password: this.createUserForm.value.password,
       type: Constants.USER_TYPE_USER,
       photoUrl: ''

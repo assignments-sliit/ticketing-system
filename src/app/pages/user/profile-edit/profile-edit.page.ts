@@ -17,7 +17,7 @@ export class ProfileEditPage implements OnInit {
 
   public user_name:any;
   public user_email:any;
-  public n_ame:any;
+  public phone:any;
   public photo_URL:any;
   public UI:any;
 
@@ -48,12 +48,12 @@ export class ProfileEditPage implements OnInit {
       
       this.storage.get("users").then( (val) =>{
           if(val){ 
-           this.user_name=val.username;
-            this.n_ame=val.name;
+            this.user_name=val.name;
+            this.phone=val.phone;
             this.user_email=val.email;
             this.photo_URL=val.photoURL;
             this.UI=val.id;
-            console.log(this.n_ame);
+            console.log(this.user_name);
             
           }else{
             this.router.navigate(["/sign-in"]);
@@ -65,8 +65,8 @@ export class ProfileEditPage implements OnInit {
      Profile_update(){
       //this.router.navigate(["/profile-edit"]); 
     const user: User = {
-      username: this.createUserEditForm.value.username,
-      name: this.createUserEditForm.value.name,
+      name: this.createUserEditForm.value.username,
+      phone: this.createUserEditForm.value.name,
       email: this.createUserEditForm.value.email,
       password:'',
       type:'',

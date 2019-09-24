@@ -63,10 +63,13 @@ export class UserService {
         // add the user to the "users" database
         let user = {
           id: userResponse.user.uid,
+          name: users.name,
+          phone: users.phone,
           email: userResponse.user.email,
           role: users.type,
-          username: users.username,
-          name: users.name
+          photoURL:users.photoUrl
+          
+         
 
         }
 
@@ -244,7 +247,7 @@ async userProfileUpdate(users:User){
   let user = {
     
     email: users.email,
-    username: users.username,
+    phone: users.phone,
     name: users.name
 
   }
