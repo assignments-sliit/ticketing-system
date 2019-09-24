@@ -45,6 +45,10 @@ export class UserService {
     this.userStatusChanges.next(userStatus);
   }
 
+  getUserStatus(){
+    return this.currentUser;
+  }
+
 
   signUp(users: User) {
 
