@@ -80,4 +80,8 @@ export class ProfileEditPage implements OnInit {
     //  this.getTheValue();
    }
 
+   picUpload(){
+    console.log("PIC Uplode")
+  }
+
 }

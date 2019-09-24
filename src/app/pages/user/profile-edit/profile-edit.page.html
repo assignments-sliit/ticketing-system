@@ -1,8 +1,22 @@
 <ion-header>
   <ion-toolbar>
+
+
     <ion-title>profile-edit</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<div class="logo">
+    <div class="logo-img">
+       
+   
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" (click)="picUpload()"/>
+    
+
+    </div>
+
+  </div>
+
 
 <ion-content>
     <form [formGroup]="createUserEditForm" (submit)="Profile_update()">

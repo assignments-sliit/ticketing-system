@@ -1,0 +1,23 @@
+.logo{
+    position: relative;
+    height:250px;
+    
+}
+.logo-img{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    border-color: white;
+}
+.logo-img ion-img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10%;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #ccc #666;
+    margin-bottom: 80px;
+    
+}
