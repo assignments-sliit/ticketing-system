@@ -17,16 +17,17 @@
       <ion-list noi-line>
         <ion-menu-toggle auto-hide="false" *ngFor="let p of pages">
           <ion-item lines="none" [routerLink]="p.url" routerDirection="root" [class.active-item]="selectedPath===p.url"
-            class="list-color">
-            <ion-icon [name]="p.icon" class="list-color" item-start></ion-icon>
+            class="list-color"> &nbsp;
+            <ion-icon [name]="p.icon" class="list-color" item-start></ion-icon>&nbsp;
             {{p.title}}
 
           </ion-item>
 
         </ion-menu-toggle>
 
-        <ion-button (click)="logout()">
-          <ion-icon name='md-home' class="list-color"></ion-icon>
+        <ion-button color="danger" (click)="logout()" padding>
+          <ion-icon name='log-out' slot="start" class="list-color" padding-right padding-left></ion-icon>
+          Sign out
         </ion-button>
       </ion-list>
     </ion-content>

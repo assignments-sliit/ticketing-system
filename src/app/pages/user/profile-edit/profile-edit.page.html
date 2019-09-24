@@ -1,50 +1,55 @@
 <ion-header>
   <ion-toolbar>
 
-
-    <ion-title>profile-edit</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu/profile"> </ion-back-button>
+    </ion-buttons>
+    <ion-title>Edit Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <div class="logo">
-    <div class="logo-img">
-       
-   
-        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" (click)="picUpload()"/>
-    
+  <div class="logo-img">
 
-    </div>
+
+    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" (click)="picUpload()" />
+
 
   </div>
 
+</div>
+
 
 <ion-content>
-    <form [formGroup]="createUserEditForm" (submit)="Profile_update()">
-        <ion-item>
-          
-          <ion-input formControlName="username" value={{user_name}}  type="text" placeholder="Prefered Username">
-    
-          </ion-input>
-        </ion-item>
-    
-        <ion-item>
-         
-          <ion-input formControlName="name"  value={{phone}} type="text" placeholder="Your Name">
-    
-          </ion-input>
-        </ion-item>
-    
-        <ion-item>
-          
-          <ion-input formControlName="email" [disabled]="!email" value={{user_email}} type="email" placeholder="Your Email">
-    
-          </ion-input>
-        </ion-item>
-    
-        <br />
-        <br />
-        <ion-button type="submit" [disabled]="!createUserEditForm.valid" class="ion-float-right">
-          UPDATE
-        </ion-button>
-        </form>
+  <form [formGroup]="createUserEditForm" (submit)="Profile_update()">
+    <ion-item>
+
+      <ion-input formControlName="username" value={{user_name}} type="text" placeholder="Prefered Username">
+
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+
+      <ion-input formControlName="name" value={{phone}} type="text" placeholder="Your Name">
+
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+
+      <ion-input formControlName="email" [disabled]="!email" value={{user_email}} type="email" placeholder="Your Email">
+
+      </ion-input>
+    </ion-item>
+
+    <br />
+    <br />
+    <ion-button type="submit" [disabled]="!createUserEditForm.valid" class="ion-float-right" padding>
+      <ion-icon name='save' slot="start" class="list-color" padding-right padding-left></ion-icon>
+      Save
+    </ion-button>
+
+
+  </form>
 </ion-content>

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Constants } from '../../../constants/constants';
-import { BarcodeScanner,BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
+import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner/ngx';
 import { Platform } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
+import { Storage } from '@ionic/storage';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-users-home',
@@ -17,28 +19,30 @@ export class UsersHomePage implements OnInit {
 
   encodedData: any;
 
-  constructor(public userService:UserService,private barcodeScanner: BarcodeScanner) {
-    this.encodedData= "My Name is Manoj"//userService.currentUser;
-   }
+  encodedDataText:any;
 
-  ngOnInit() {
-    //this.encodedText();
+  constructor(public userService: UserService,
+    private barcodeScanner: BarcodeScanner,
+    public storage:Storage
+    ) {
+      this.encodedDataText={}
   }
 
-  // encodedText() { 
-  //   this.barcodeScanner
-  //     .encode(this.barcodeScanner.Encode.TEXT_TYPE, this.encodedData)
-  //     .then(
-  //       encodedData => {
-  //         console.log(encodedData);
-  //         this.encodedData = encodedData;
-  //       },
-  //       (err) => {
-  //         console.log("Error Occurred: " + err);
-          
-          
-  //       }
-  //     )
-  // }
+  ngOnInit() {
+
+   this.storage.get('users').then((value)=>{
+     console.log(value.name);
+     this.encodedData=JSON.stringify(value);
+     this.encodedDataText.name=value.name;
+     this.encodedDataText.username=value.username;
+     this.encodedDataText.email=value.email;
+   });
+    
+   
+
+  }
+
+
+
 
 }

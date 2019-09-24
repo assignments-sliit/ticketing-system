@@ -1,25 +1,27 @@
 <ion-header>
   <ion-toolbar>
-      <ion-buttons slot="start">
-      
-          <ion-menu-button></ion-menu-button>
-    
-        </ion-buttons>
+    <ion-buttons slot="start">
+
+      <ion-menu-button></ion-menu-button>
+
+    </ion-buttons>
     <ion-title>{{userHomeTitle}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <h1>Enter Value to Create QR code</h1>
-  <ion-input type="text" [(ngModel)]="encodedData"></ion-input>
-
-  <ion-card *ngIf="encodedData">
+  <ion-card *ngIf="encodedData" ion-class="padding">
     <ngx-qrcode [(qrc-value)]="encodedData">
 
     </ngx-qrcode>
-    <ion-card-content>
-      <p>Value in QR : {{encodedData}}</p>
-    </ion-card-content>
+    <ion-card-header>
+    <ion-card-subtitle>Your QR code</ion-card-subtitle>
+    <ion-card-title>{{encodedDataText.name}}</ion-card-title>
+</ion-card-header>
+
+<ion-card-content>
+Show this QR code to the bus conductor in order to pay for the bus fare
+  </ion-card-content>
   </ion-card>
 
 

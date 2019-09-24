@@ -1,49 +1,100 @@
 <ion-header>
   <ion-toolbar>
-      <ion-buttons slot="start">
-      
-          <ion-menu-button></ion-menu-button>
-    
-        </ion-buttons>
+    <ion-buttons slot="start">
+
+      <ion-menu-button></ion-menu-button>
+
+    </ion-buttons>
     <ion-title>{{profileTitle}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
- 
+<ion-content fullscreen scrollY=true>
+
+  <ion-card padding>
+    <ion-card-subtitle padding-bottom>
+      Profile Details
+    </ion-card-subtitle>
+    <div class="logo">
+      <div class="logo-img">
+
+
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" (click)="picUpload()" />
+
+
+      </div>
+
+    </div>
+
+        <ion-item lines="none">
+            <ion-icon name='person' slot="start" class="list-color"></ion-icon>
+          <ion-label>{{user_name}}</ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+            <ion-icon name='mail' slot="start" class="list-color"></ion-icon>
+          <ion-label>{{user_email}}</ion-label>
+        </ion-item>
+        
+        <ion-item lines="none">
+            <ion-icon name='call' slot="start" class="list-color"></ion-icon>
+          <ion-label>{{phone}}</ion-label>
+        </ion-item>
+
+      
+      <ion-button class="ion-float-right" (click)="Profile_update()" padding-top padding-bottom>
+        <ion-icon name='create' slot="start" class="list-color"></ion-icon>
+        <!-- &nbsp; -->
+        Edit profile
+      </ion-button>
+
+
+  </ion-card>
+
+  <!-- <ion-item lines="none">
+    <ion-label>Hi</ion-label>
+  </ion-item>
+  <ion-item lines="none">
+    <ion-label>bye</ion-label>
+  </ion-item> -->
+
+
+  <ion-card padding>
+    <ion-card-subtitle>
+      Account Details
+    </ion-card-subtitle>
+
     <form [formGroup]="createUserForm" (submit)="Profile_update()">
-        <ion-item>
-          
-          <ion-input formControlName="username" value={{user_name}}  type="text" placeholder="Prefered Username">
-    
-          </ion-input>
-        </ion-item>
-    
-        <ion-item>
-         
-          <ion-input formControlName="name"  value={{phone}} type="text" placeholder="Your Name">
-    
-          </ion-input>
-        </ion-item>
-    
-        <ion-item>
-          
-          <ion-input formControlName="email" [disabled]="!email" value={{user_email}} type="email" placeholder="Your Email">
-    
-          </ion-input>
-        </ion-item>
-    
-        <br />
-        <br />
-        <ion-button type="submit" [disabled]="!createUserForm.valid" class="ion-float-right">
-          UPDATE
-        </ion-button>
-    
-      </form>
+      <ion-item>
 
+        <ion-input formControlName="username" value={{user_name}} type="text" placeholder="Prefered Username">
 
+        </ion-input>
+      </ion-item>
 
+      <ion-item>
 
+        <ion-input formControlName="name" value={{phone}} type="text" placeholder="Your Name">
+
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+
+        <ion-input formControlName="email" [disabled]="!email" value={{user_email}} type="email"
+          placeholder="Your Email">
+
+        </ion-input>
+      </ion-item>
+
+      <!-- <ion-button type="submit" [disabled]="!createUserForm.valid" class="ion-float-right" padding-top padding-bottom>
+              <ion-icon name='create' slot="start" class="list-color"></ion-icon>
+              &nbsp;
+              Edit profile
+            </ion-button> -->
+
+    </form>
+  </ion-card>
 
 
 
