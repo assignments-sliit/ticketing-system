@@ -42,4 +42,8 @@ export class SignInPage implements OnInit {
     this.userService.login(formData["email"], formData["password"]);
 
   }
+
+  goToSignUp(){
+    this.router.navigate([Constants.URL_SIGN_UP]);
+  }
 }

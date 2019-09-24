@@ -3,13 +3,12 @@
  * - Manoj
  * 
  * 22-SEP-2019 : Manoj : Added the file.
- * 
+ * 23-SEP-2019 : Manoj : Added some constants
  * 
  * 
  */
 
 export class Constants {
-
 
     //Users
     static USER_ALREADY_EXISTS = "User already exists!";
@@ -21,10 +20,11 @@ export class Constants {
 
 
     //Routing and Pages
-    static URL_HOME = 'home';
-    static URL_ADMIN_HOME = 'admin-home';
-    static URL_USER_HOME = 'user-home';
-
+    static URL_HOME = '/home';
+    static URL_ADMIN_HOME = '/admin-home';
+    static URL_USER_HOME = '/user-home';
+    static URL_MENU = '/menu';
+    static URL_SIGN_UP = '/sign-up';
 
 
     //titles
@@ -52,5 +52,32 @@ export class Constants {
     static LBL_FRM_EMAIL = "Email";
     static LBL_FRM_PASSWORD = "Password";
 
+    // static LBL_FRM_EMAIL_TAM="மின்னஞ்சல்";
 
+    //FIREBASE AUTH ERRORS
+    static FIREBASE_AUTH_WRONG_PASSWORD_CODE = "auth/wrong-password";
+    static FIREBASE_AUTH_INVALID_EMAIL_CODE = "auth/invalid-email";
+    static FIREBASE_AUTH_USER_NOT_FOUND = "auth/user-not-found";
+    static FIREBASE_AUTH_TOO_MANY_REQUESTS="auth/too-many-requests";
+
+
+    //alert headers
+    static ALT_HD_INVALID_EMAIL = "Invalid Email ID";
+    static ALT_HD_INCORRECT_PASSWORD = "Incorrect Password";
+
+    //alert subtitles
+    static ALT_ST_INVALID_EMAIL = "Invalid Email ID Provided!";
+    static ALT_ST_INCORRECT_PASSWORD = "Incorrect Password Provided!";
+
+    //alert buttons
+    static ALT_BTN_OK = "OKAY";
+
+    //alert messages
+    static ALT_MSG_INVALID_EMAIL = "You provided an invalid email ID. Please check again and re-enter a valid email!";
+    static ALT_MSG_INCORRECT_PASSWORD1 = "The password you entered is wrong for ";
+    static ALT_MSG_INCORRECT_PASSWORD2=". Please enter the correct password!"
+
+
+
+    
 }
