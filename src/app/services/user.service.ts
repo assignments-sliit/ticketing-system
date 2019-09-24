@@ -1,18 +1,39 @@
+/**
+ *  NOTE TO DEVELOPERS: ALL VARIABLES SHOULD BE IN UPPERCASE LETTER AND SHOULD NOT EXCEED MORE THAN 50 CHARS!
+ * - Manoj
+ * 
+ * 02-SEP-2019 : Manoj : Added the file.
+ * ...
+ * 23-SEP-2019 : Manoj : Added dialogs for login validation errors, added constants
+ * 24-SEP-2019 : Manoj : Added Toast for successful login
+ * 
+ * 
+ */
+
+
+
+
 import { Injectable, NgZone } from '@angular/core';
 import { User } from '../models/user';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { loadingController } from '@ionic/core';
+import { loadingController, ToastButton } from '@ionic/core';
 import { Constants } from '../constants/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private ngZone: NgZone, private afAuth: AngularFireAuth, private firestore: AngularFirestore, private router: Router, public loadingCtrl: LoadingController) { }
+  constructor(private ngZone: NgZone,
+    private afAuth: AngularFireAuth,
+    private firestore: AngularFirestore,
+    private router: Router,
+    public loadingCtrl: LoadingController,
+    public alertController: AlertController,
+    public toastController: ToastController) { }
 
   public currentUser: any;
   public userStatus: string;
@@ -42,8 +63,6 @@ export class UserService {
 
         }
 
-
-
         //add the user to the database
         this.firestore.collection("users").add(user)
           .then(user => {
@@ -67,32 +86,102 @@ export class UserService {
   }
 
 
-  //login with mail and password 
-
-  async login(email: string, password: string) {
-    //check mail and password 
-    const loading=this.loadingCtrl.create();
-    this.afAuth.auth.signInWithEmailAndPassword(email, password)
+  //Login with Email and password 
+  login(email: string, password: string) {
+  
+    this.afAuth.auth.signInWithEmailAndPassword(email, password)   //check mail and password 
       .then((user) => {
-        //check role admin or user 
-        
         this.firestore.collection("users").ref.where("email", "==", user.user.email).onSnapshot(snap => {
           snap.forEach(userRef => {
-            console.log("userRef", userRef.data());
+            console.log("userRef", userRef.data().name);
+            
             this.currentUser = userRef.data();
-            //setUserStatus
-            this.setUserStatus(this.currentUser)
-            if (userRef.data().role !== "admin") {
-              this.router.navigate(["/menu"]);
-            } else {
-              this.router.navigate(["/admin-home"]);
-            }
+            this.setUserStatus(this.currentUser);  //setUserStatus
+
+            this.router.navigate([Constants.URL_MENU]); //On success login, navigate to this page
+            
+            this.successSignInToast(userRef.data().name); //welcome toast
+
+
           })
         })
 
-      }).catch(err => err)
+      }).catch(err => {
+        console.log(err.code);
 
-      return 0;
+        if (err.code == Constants.FIREBASE_AUTH_WRONG_PASSWORD_CODE) {
+          this.incorrectPasswordAlert(email);
+        } else if (err.code == Constants.FIREBASE_AUTH_INVALID_EMAIL_CODE) {
+          this.incorrectEmailAlert();
+        } else if (err.code == Constants.FIREBASE_AUTH_USER_NOT_FOUND) {
+          this.userNotFound();
+        } else if (err.code == Constants.FIREBASE_AUTH_TOO_MANY_REQUESTS) {
+          this.tooManyRequests();
+        }
+      }
+      )
+
+
+
+  }
+
+
+  async successSignInToast(name) {
+    const toast = await this.toastController.create({
+      message: 'Welcome ' + name + "!",
+      duration: 1000
+    });
+    toast.present();
+  }
+
+  async tooManyRequests() {
+
+    const alert = await this.alertController.create({
+      header: 'Too much req',
+      subHeader: 'Subtitle',
+      message: 'This is an alert message.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+
+  }
+
+  async incorrectPasswordAlert(email) {
+    const alert = await this.alertController.create({
+      header: Constants.ALT_HD_INCORRECT_PASSWORD,
+      subHeader: Constants.ALT_ST_INCORRECT_PASSWORD,
+      message: Constants.ALT_MSG_INCORRECT_PASSWORD1 + email + Constants.ALT_MSG_INCORRECT_PASSWORD2,
+      buttons: [Constants.ALT_BTN_OK]
+    });
+
+    await alert.present();
+
+  }
+
+  async incorrectEmailAlert() {
+
+    const alert = await this.alertController.create({
+      header: Constants.ALT_HD_INVALID_EMAIL,
+      subHeader: Constants.ALT_ST_INVALID_EMAIL,
+      message: Constants.ALT_MSG_INVALID_EMAIL,
+      buttons: [Constants.ALT_BTN_OK]
+    });
+
+    await alert.present();
+
+  }
+
+  async userNotFound() {
+
+    const alert = await this.alertController.create({
+      header: 'User not Found',
+      subHeader: 'Subtitle',
+      message: 'This is an alert message.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
 
   }
 
