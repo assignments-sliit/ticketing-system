@@ -1,17 +1,11 @@
 <ion-header>
   <ion-toolbar>
-      <ion-buttons slot="start">
-      
-          <ion-menu-button></ion-menu-button>
-    
-        </ion-buttons>
-    <ion-title>{{profileTitle}}</ion-title>
+    <ion-title>profile-edit</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
- 
-    <form [formGroup]="createUserForm" (submit)="Profile_update()">
+    <form [formGroup]="createUserEditForm" (submit)="Profile_update()">
         <ion-item>
           
           <ion-input formControlName="username" value={{user_name}}  type="text" placeholder="Prefered Username">
@@ -35,18 +29,8 @@
     
         <br />
         <br />
-        <ion-button type="submit" [disabled]="!createUserForm.valid" class="ion-float-right">
+        <ion-button type="submit" [disabled]="!createUserEditForm.valid" class="ion-float-right">
           UPDATE
         </ion-button>
-    
-      </form>
-
-
-
-
-
-
-
-
-
+        </form>
 </ion-content>

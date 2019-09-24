@@ -21,6 +21,7 @@ const routes: Routes = [
      { path: 'view-time-table',
       loadChildren: '../view-time-table/view-time-table.module#ViewTimeTablePageModule' 
     },
+
     {
       path :'',
       redirectTo:'/menu/users-home'

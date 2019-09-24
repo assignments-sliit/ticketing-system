@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-user-home',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserHomePage implements OnInit {
 
-  constructor() { }
+  constructor(private firebaseService:UserService) { }
 
-  ngOnInit() {
-  }
+  userStatus=this.firebaseService.userStatus;
+     ngOnInit() {
+
+     
+        this.firebaseService.userChanges();
+       
+      // this.firebaseService.userStatusChanges.subscribe(x =>this.userStatus =x);
+     }
+
+
 
 }

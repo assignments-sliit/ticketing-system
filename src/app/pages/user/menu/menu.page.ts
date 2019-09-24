@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterEvent } from '@angular/router';
 import { UserService } from "../../../services/user.service";
 import { Constants } from 'src/app/constants/constants';
+import{Storage} from '@ionic/storage';
 
 @Component({
   selector: 'app-menu',
@@ -9,6 +10,12 @@ import { Constants } from 'src/app/constants/constants';
   styleUrls: ['./menu.page.scss'],
 })
 export class MenuPage implements OnInit {
+
+  public user_name:any;
+  public user_email:any;
+  public n_ame:any;
+  public photo_URL:any;
+  public UI:any;
 
   pages =[
     {
@@ -30,7 +37,7 @@ export class MenuPage implements OnInit {
 
     selectedPath="";
 
-    constructor(private router:Router,private firebaseService:UserService) {
+    constructor(private router:Router,private firebaseService:UserService, public storage:Storage,) {
       this.router.events.subscribe((event:RouterEvent)=>{
            this.selectedPath=event.url;
       });
@@ -39,10 +46,33 @@ export class MenuPage implements OnInit {
      userStatus=this.firebaseService.userStatus;
      ngOnInit() {
 
-     
-       this.firebaseService.userChanges();
+      
        
-      this.firebaseService.userStatusChanges.subscribe(x =>this.userStatus =x);
+     }
+
+      async getTheValue(){
+    
+      this.storage.get("users").then( (val) =>{
+          if(val){ 
+           this.user_name=val.username;
+            this.n_ame=val.name;
+            this.user_email=val.email;
+            this.photo_URL=val.photoURL;
+            this.UI=val.id;
+            console.log(this.n_ame);
+            
+          }else{
+            this.router.navigate(["/sign-in"]);
+          }
+      })
+  
+     }
+    
+     ionViewWillEnter(){
+      this.firebaseService.userChanges();
+      this.getTheValue();
+      
+     this.firebaseService.userStatusChanges.subscribe(x =>this.userStatus =x);
      }
    
      logout(){

@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
+
 import { IonicModule } from '@ionic/angular';
 
-import { ProfilePage } from './profile.page';
+import { ProfileEditPage } from './profile-edit.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfilePage
+    component: ProfileEditPage
   }
 ];
 
@@ -22,6 +23,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProfilePage]
+  declarations: [ProfileEditPage]
 })
-export class ProfilePageModule {}
+export class ProfileEditPageModule {}
