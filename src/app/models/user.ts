@@ -5,5 +5,6 @@ export interface User{
     phone:string;
     photoUrl:string;
     password:string;
+    nic:string,
     type:string;
 }

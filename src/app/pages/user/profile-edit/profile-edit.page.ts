@@ -20,6 +20,7 @@ export class ProfileEditPage implements OnInit {
   public phone:any;
   public photo_URL:any;
   public UI:any;
+  public NIC:any;
 
 
   constructor(private firebaseService: UserService,
@@ -30,7 +31,8 @@ export class ProfileEditPage implements OnInit {
       this.createUserEditForm = formbuilder.group({
         username: ['', Validators.required],
         name: ['', Validators.required],
-        email: ['', Validators.required]
+        email: ['', Validators.required],
+        nic:['',Validators.required]
        
       });
      }
@@ -53,6 +55,7 @@ export class ProfileEditPage implements OnInit {
             this.user_email=val.email;
             this.photo_URL=val.photoURL;
             this.UI=val.id;
+            this.NIC=val.nic;
             console.log(this.user_name);
             
           }else{

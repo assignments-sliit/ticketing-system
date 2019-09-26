@@ -66,6 +66,7 @@ export class UserService {
           name: users.name,
           phone: users.phone,
           email: userResponse.user.email,
+          nic:users.nic,
           role: users.type,
           photoURL:users.photoUrl
           
@@ -97,6 +98,26 @@ export class UserService {
 
   }
 
+
+
+  //Accont table 
+  accountcreate(){
+
+       
+    let account={
+      accountnum:Math.floor(100000 + Math.random() * 900000),
+      nic:this.currentUser.nic,
+      id:this.currentUser.id,
+      email:this.currentUser.email,
+      amount:50,
+      loan:0,
+      date:new Date()
+
+    }
+  this.firestore.collection(`account/`).add(account);
+    
+
+}
 
   //Login with Email and password 
   async login(email: string, password: string) {
