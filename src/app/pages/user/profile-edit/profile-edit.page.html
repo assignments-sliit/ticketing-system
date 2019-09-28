@@ -11,8 +11,8 @@
 <div class="logo">
   <div class="logo-img">
 
-
-    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" (click)="picUpload()" />
+    <img [src]="ImgSrc" accept="image/*" (click)="fileUploader.click()"/>
+   
 
 
   </div>
@@ -21,7 +21,14 @@
 
 
 <ion-content>
-  <form [formGroup]="createUserEditForm" (submit)="Profile_update()">
+  <form [formGroup]="createUserEditForm" (submit)="Profile_update(createUserEditForm.value)">
+    <ion-item>
+          
+      <ion-input formControlName="photoURL"  #fileUploader type="file"  (change)="showPerview($event)">
+
+      </ion-input>
+    </ion-item>
+  
     <ion-item>
 
       <ion-input formControlName="username" value={{user_name}} type="text" placeholder="Prefered Username">
@@ -31,7 +38,7 @@
 
     <ion-item>
 
-      <ion-input formControlName="name" value={{phone}} type="text" placeholder="Your Name">
+      <ion-input formControlName="phone" value={{phone}} type="text" placeholder="Your Name">
 
       </ion-input>
     </ion-item>

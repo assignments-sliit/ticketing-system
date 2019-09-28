@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import{ AngularFireAuthModule} from '@angular/fire/auth'; 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import {IonicStorageModule} from '@ionic/storage';
+import { AngularFireStorageModule,StorageBucket} from '@angular/fire/storage';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -30,6 +31,7 @@ import {IonicStorageModule} from '@ionic/storage';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     FormsModule,
     ReactiveFormsModule
   ],

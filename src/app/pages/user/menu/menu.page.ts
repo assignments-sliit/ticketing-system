@@ -11,6 +11,8 @@ import { Storage } from '@ionic/storage';
 })
 export class MenuPage implements OnInit {
 
+  imgsrc:string="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
+
   public user_name: any;
   public user_email: any;
   public phone: any;
@@ -58,12 +60,21 @@ export class MenuPage implements OnInit {
         this.user_name = val.name;
         this.phone = val.phone;
         this.user_email = val.email;
-        this.photo_URL = val.photoURL;
+        //this.photo_URL = val.photoURL;
         this.UI = val.id;
-        console.log(this.user_name);
+        if(val.photoURL){
+          this.imgsrc=val.photoURL;
+          console.log("urIMG"+val.photoURL);
+        }else{
+          this.imgsrc="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
 
-      } else {
-        this.router.navigate(["/sign-in"]);
+        }
+        
+        
+        
+      }else{
+        this.imgsrc="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
+
       }
     })
 

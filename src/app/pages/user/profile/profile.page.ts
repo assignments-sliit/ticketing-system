@@ -14,11 +14,13 @@ import{User} from '../../../models/user'
 export class ProfilePage implements OnInit {
 
 
+  ImgSrc:string="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
+
 
   public createUserForm: FormGroup;
   userStatus=this.firebaseService.userStatus;
 
-  public user_name:any;
+  public name:any;
   public user_email:any;
   public phone:any;
   public photo_URL:any;
@@ -53,17 +55,23 @@ export class ProfilePage implements OnInit {
     
     this.storage.get("users").then( (val) =>{
         if(val){ 
-          this.user_name=val.name;
+          this.name=val.name;
             this.phone=val.phone;
             this.user_email=val.email;
-            this.photo_URL=val.photoURL;
+            //this.photo_URL=val.photoURL;
             this.UI=val.id;
             this.NIC=val.nic;
-            console.log(this.user_name);
-          
-        }else{
-          this.router.navigate(["/sign-in"]);
-        }
+            if(val.photoURL){
+              this.ImgSrc=val.photoURL;
+            }else{
+              this.ImgSrc="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
+            }
+           
+            console.log("profile"+val.photoURL);
+            
+          }else{
+            this.ImgSrc="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
+          }
     })
 
    }
