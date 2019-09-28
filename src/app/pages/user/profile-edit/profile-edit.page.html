@@ -58,7 +58,7 @@
 
     <br />
     <br />
-    <ion-button type="submit" class="ion-float-right" padding>
+    <ion-button type="submit" [disabled]="!createUserEditForm.valid" class="ion-float-right" padding>
       <ion-icon name='save' slot="start" class="list-color" padding-right padding-left></ion-icon>
       Save
     </ion-button>

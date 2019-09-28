@@ -38,6 +38,7 @@ export class UserService {
     public storage:Storage
     ) { }
 
+    public scannedNotificationPresented:boolean=false;
   public currentUser: any;
   public userStatus: string;
   public userStatusChanges: BehaviorSubject<string> = new BehaviorSubject<string>(this.userStatus);
@@ -245,6 +246,15 @@ export class UserService {
             this.currentUser = userRef.data();
             //setUserStatus
             this.setUserStatus(this.currentUser);
+
+            if(this.currentUser.isQrScanned){
+              if(!this.scannedNotificationPresented){
+                this.scannedNotification(userRef.id);
+              }
+            }else{
+              console.log('not scanned');
+              
+            }
             console.log(this.userStatus)
             this.storage.set("users",this.userStatus);
             // if (userRef.data().role !== "admin") {
@@ -263,6 +273,43 @@ export class UserService {
     })
   }
 
+
+  async scannedNotification(id) {
+    this.scannedNotificationPresented=true;
+    const alert = await this.alertController.create({
+      header: 'Notification',
+      subHeader: 'Your QR has been scanned ',
+      message: 'Tap proceed to enter journey details',
+      buttons: [{
+        text:'cancel journey',
+        handler:()=>{
+          console.log('trip cancelled!');
+          //change to false
+          this.setQrToFalse(id);
+          this.scannedNotificationPresented=false;
+
+          
+        }
+      },{
+          text:'proceed',
+          handler:()=>{
+            this.router.navigateByUrl('/process-trip');
+            //change to false
+            this.setQrToFalse(id);
+            this.scannedNotificationPresented=false;
+          }
+      }]
+    });
+
+    await alert.present();
+  }
+
+
+  setQrToFalse(id){
+    this.firestore.collection("users").doc(id).update({isQrScanned:false})
+  }
+
+  
 //user profile update
 async userProfileUpdate(users:User){
 

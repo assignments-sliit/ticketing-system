@@ -40,7 +40,9 @@ export class UsersHomePage implements OnInit {
 
     this.storage.get('users').then((value) => {
       console.log(value.name);
-      this.encodedData = JSON.stringify(value);
+       
+     var x =value;
+     this.encodedData=x.id;
       this.encodedDataText.name = value.name;
       this.encodedDataText.username = value.username;
       this.encodedDataText.email = value.email;
