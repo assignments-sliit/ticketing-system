@@ -68,7 +68,8 @@ export class UserService {
           email: userResponse.user.email,
           nic:users.nic,
           role: users.type,
-          photoURL:users.photoUrl
+          photoURL:users.photoUrl,
+          isQrScanned:false
           
          
 
@@ -272,6 +273,7 @@ async userProfileUpdate(users:User){
     name: users.name,
     nic:users.nic,
     photoURL:users.photoUrl
+    
 
   }
 
