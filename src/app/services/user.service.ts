@@ -228,7 +228,7 @@ export class UserService {
         this.currentUser = null;
         //set the listenener to be null, for the UI to react
         this.setUserStatus(null);
-        this.storage.set("users",null);
+        this.storage.set("users","");
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
 
       }).catch((err) => {
@@ -240,7 +240,7 @@ export class UserService {
   userChanges() {
     this.afAuth.auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
-        this.firestore.collection("users").ref.where("email", "==", currentUser.email).onSnapshot(snap => {
+        this.firestore.collection("users").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
           snap.forEach(userRef => {
             this.currentUser = userRef.data();
             //setUserStatus
@@ -268,7 +268,7 @@ async userProfileUpdate(users:User){
 
   let user = {
     
-    email: users.email,
+   // email: users.email,
     phone: users.phone,
     name: users.name,
     nic:users.nic,
@@ -284,21 +284,16 @@ async userProfileUpdate(users:User){
           snap.forEach(userRef => {
             this.firestore.collection("users").doc(userRef.id).update(user)
             .then((user) => {
-              this.firestore.collection("users").ref.where("email", "==", users.email).onSnapshot(snap => {
-                snap.forEach(userRef => {
+              // this.firestore.collection("users").ref.where("id", "==", currentUser.uid ).onSnapshot(snap => {
+              //   snap.forEach(userRef => {
                  
                   
-                  this.currentUser = userRef.data();
-                  this.setUserStatus(this.currentUser);  //setUserStatus
-                  this.storage.set("users",this.userStatus);
-                  console.log(this.userStatus);
-                  //On success login, navigate to this page
+              //     this.currentUser = userRef.data();
                   
-                  this.successSignInToast(userRef.data().name); //welcome toast
-                  this.ngZone.run(() => this.router.navigate([Constants.URL_MENU]));
+                 
       
-                })
-              })
+              //   })
+              // })
              
             }).catch(err => {
               console.log(err);
@@ -306,6 +301,12 @@ async userProfileUpdate(users:User){
            
           });
         })
+        console.log(this.userStatus);
+        //On success login, navigate to this page
+                  // this.setUserStatus(this.currentUser);  //setUserStatus
+                  // this.storage.set("users",this.userStatus);
+        this.successSignInToast(this.currentUser.name); //welcome toast
+        this.ngZone.run(() => this.router.navigate([Constants.URL_MENU]));
         
       }else{
        

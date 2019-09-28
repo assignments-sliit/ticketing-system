@@ -44,7 +44,7 @@ export class UsersHomePage implements OnInit {
       this.encodedDataText.name = value.name;
       this.encodedDataText.username = value.username;
       this.encodedDataText.email = value.email;
-      this.encodedDataText.isQrScanned = value.isQrScanned.toString();
+      this.encodedDataText.isQrScanned = value.isQrScanned;
       console.log(value.isQrScanned);
 
     });
