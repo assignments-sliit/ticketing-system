@@ -11,15 +11,15 @@ import { Constants } from '../constants/constants';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  ngOnInit() {
-    // throw new Error("Method not implemented.");
-  }
-  public userloginForm: FormGroup;
 
   constructor(
 
   ) {
 
+  }
+  public userloginForm: FormGroup;
+  ngOnInit() {
+    // throw new Error("Method not implemented.");
   }
 
 }

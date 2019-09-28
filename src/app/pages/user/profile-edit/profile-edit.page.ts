@@ -73,7 +73,9 @@ export class ProfileEditPage implements OnInit {
       email: this.createUserEditForm.value.email,
       password:'',
       type:'',
-      photoUrl: ''
+      photoUrl: '',
+      nic:this.createUserEditForm.value.nic,
+      isQrScanned:false
     }
   
     console.log(user);

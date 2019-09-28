@@ -64,10 +64,12 @@ export class Constants {
     //alert headers
     static ALT_HD_INVALID_EMAIL = "Invalid Email ID";
     static ALT_HD_INCORRECT_PASSWORD = "Incorrect Password";
+    static ALT_HD_TOO_MUCH_REQ="Calm down";
 
     //alert subtitles
     static ALT_ST_INVALID_EMAIL = "Invalid Email ID Provided!";
     static ALT_ST_INCORRECT_PASSWORD = "Incorrect Password Provided!";
+    static ALT_ST_TOO_MUCH_REQ="Too many sign in attempts";
 
     //alert buttons
     static ALT_BTN_OK = "OKAY";
@@ -76,7 +78,7 @@ export class Constants {
     static ALT_MSG_INVALID_EMAIL = "You provided an invalid email ID. Please check again and re-enter a valid email!";
     static ALT_MSG_INCORRECT_PASSWORD1 = "The password you entered is wrong for ";
     static ALT_MSG_INCORRECT_PASSWORD2=". Please enter the correct password!"
-
+    static ALT_MSG_TOO_MUCH_REQ="You have made too much sign in attempts! Please refresh or close the app and try again";
 
 
     

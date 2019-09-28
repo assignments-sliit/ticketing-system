@@ -9,7 +9,8 @@ const routes: Routes = [
   { path: 'sign-up', loadChildren: './pages/sign-up/sign-up.module#SignUpPageModule' },
   { path: 'sign-in', loadChildren: './pages/sign-in/sign-in.module#SignInPageModule' },
   { path: 'menu', loadChildren: './pages/user/menu/menu.module#MenuPageModule' },
-  { path: 'profile-edit', loadChildren: './pages/user/profile-edit/profile-edit.module#ProfileEditPageModule' },
+  { path: 'profile-edit', loadChildren: './pages/user/profile-edit/profile-edit.module#ProfileEditPageModule' },  { path: 'process-trip', loadChildren: './pages/process-trip/process-trip.module#ProcessTripPageModule' },
+
 
   
 ];

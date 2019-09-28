@@ -7,4 +7,5 @@ export interface User{
     password:string;
     nic:string,
     type:string;
+    isQrScanned:boolean
 }

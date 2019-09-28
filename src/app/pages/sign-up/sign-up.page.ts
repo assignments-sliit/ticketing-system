@@ -56,7 +56,8 @@ export class SignUpPage implements OnInit {
       phone: this.createUserForm.value.phone,
       password: this.createUserForm.value.password,
       type: Constants.USER_TYPE_USER,
-      photoUrl: ''
+      photoUrl: '',
+      isQrScanned:false
     }
     this.userService.signUp(user);
   }

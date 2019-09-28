@@ -22,7 +22,7 @@ import { AlertController, LoadingController, ToastController } from '@ionic/angu
 import { Observable, BehaviorSubject } from 'rxjs';
 import { loadingController, ToastButton } from '@ionic/core';
 import { Constants } from '../constants/constants';
-import{Storage} from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +35,8 @@ export class UserService {
     public loadingCtrl: LoadingController,
     public alertController: AlertController,
     public toastController: ToastController,
-    public storage:Storage
-    ) { }
+    public storage: Storage
+  ) { }
 
   public currentUser: any;
   public userStatus: string;
@@ -48,7 +48,7 @@ export class UserService {
     this.userStatusChanges.next(userStatus);
   }
 
-  getUserStatus(){
+  getUserStatus() {
     return this.currentUser;
   }
 
@@ -58,7 +58,7 @@ export class UserService {
     const email = users.email
     const password = users.password
 
-   const res= await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+    const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((userResponse) => {
         // add the user to the "users" database
         let user = {
@@ -66,22 +66,25 @@ export class UserService {
           name: users.name,
           phone: users.phone,
           email: userResponse.user.email,
-          nic:users.nic,
+          nic: users.nic,
           role: users.type,
-          photoURL:users.photoUrl
-          
-         
-
+          photoURL: users.photoUrl,
+          isQrScanned: users.isQrScanned
         }
 
         //add the user to the database
         this.firestore.collection("users").add(user)
           .then(user => {
             user.get().then(x => {
+
               //return the user data
               console.log(x.data());
               this.currentUser = x.data();
               this.setUserStatus(this.currentUser);
+
+              //create an account
+              this.accountcreate();
+
               this.router.navigate(["/sign-in"]);
             })
           }).catch(err => {
@@ -94,46 +97,45 @@ export class UserService {
         console.log(Constants.UNKNOWN_ERROR_WITH_PARAMETER, err);
       })
 
-      
+
 
   }
 
 
 
   //Accont table 
-  accountcreate(){
+  accountcreate() {
 
-       
-    let account={
-      accountnum:Math.floor(100000 + Math.random() * 900000),
-      nic:this.currentUser.nic,
-      id:this.currentUser.id,
-      email:this.currentUser.email,
-      amount:50,
-      loan:0,
-      date:new Date()
+
+    let account = {
+      accountnum: Math.floor(100000 + Math.random() * 900000),
+      id: this.currentUser.id,
+      email: this.currentUser.email,
+      amount: 50,
+      loan: 0,
+      date: new Date()
 
     }
-  this.firestore.collection(`account/`).add(account);
-    
+    this.firestore.collection(`account/`).add(account);
 
-}
+
+  }
 
   //Login with Email and password 
   async login(email: string, password: string) {
-  
-   const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password)   //check mail and password 
+
+    const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password)   //check mail and password 
       .then((user) => {
         this.firestore.collection("users").ref.where("email", "==", user.user.email).onSnapshot(snap => {
           snap.forEach(userRef => {
-            console.log("userRef", userRef.data().name);
-            
+            console.log("userRef", userRef.data());
+
             this.currentUser = userRef.data();
             this.setUserStatus(this.currentUser);  //setUserStatus
-            this.storage.set("users",this.userStatus);
+            this.storage.set("users", this.userStatus);
 
             this.router.navigate([Constants.URL_MENU]); //On success login, navigate to this page
-            
+
             this.successSignInToast(userRef.data().name); //welcome toast
 
 
@@ -171,10 +173,10 @@ export class UserService {
   async tooManyRequests() {
 
     const alert = await this.alertController.create({
-      header: 'Too much req',
-      subHeader: 'Subtitle',
-      message: 'This is an alert message.',
-      buttons: ['OK']
+      header: Constants.ALT_HD_TOO_MUCH_REQ,
+      subHeader: Constants.ALT_ST_TOO_MUCH_REQ,
+      message: Constants.ALT_MSG_TOO_MUCH_REQ,
+      buttons: [Constants.ALT_BTN_OK]
     });
 
     await alert.present();
@@ -220,14 +222,14 @@ export class UserService {
   }
 
   async logOut() {
-   this.afAuth.auth.signOut()
+    this.afAuth.auth.signOut()
       .then(() => {
         console.log(Constants.SIGN_OUT_SUCCESSFUL);
         //set current user to null to be logged out
         this.currentUser = null;
         //set the listenener to be null, for the UI to react
         this.setUserStatus(null);
-        this.storage.set("users",null);
+        this.storage.set("users", null);
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
 
       }).catch((err) => {
@@ -245,7 +247,13 @@ export class UserService {
             //setUserStatus
             this.setUserStatus(this.currentUser);
             console.log(this.userStatus)
-            this.storage.set("users",this.userStatus);
+            this.storage.set("users", this.userStatus);
+
+            if (this.currentUser.isQrScanned) {
+              this.presentAlert();
+            }
+
+
             // if (userRef.data().role !== "admin") {
             //   this.ngZone.run(() => this.router.navigate(["/menu"]));
             // } else {
@@ -254,7 +262,7 @@ export class UserService {
           })
         })
       } else {
-        
+
         //the function is running on refresh so its checking if the user is logged in or not
         //hence the redirect to the login
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
@@ -262,56 +270,83 @@ export class UserService {
     })
   }
 
-//user profile update
-async userProfileUpdate(users:User){
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Notification',
+      subHeader: 'Your QR has been Scanned',
+      message: 'Click Proceed to enter the start and the destination',
+      buttons: [
+        {
+          text: 'Cancel Trip',
+          role: 'cancel',
+          cssClass: 'danger',
+          handler: () => {
+            //change QR to false in db here
+          }
+        },
+        {
+          text: 'Proceed',
+          handler: () => {
+            this.router.navigateByUrl('/process-trip');
+            //change QR to false in db here
 
-  let user = {
-    
-    email: users.email,
-    phone: users.phone,
-    name: users.name
+          }
+        }]
+    });
 
+    await alert.present();
   }
+
+  //user profile update
+  async userProfileUpdate(users: User) {
+
+    let user = {
+
+      email: users.email,
+      phone: users.phone,
+      name: users.name,
+      nic: users.nic
+
+    }
 
     this.afAuth.auth.onAuthStateChanged(currentUser => {
-      if(currentUser){
+      if (currentUser) {
 
-        this.firestore.collection("users").ref.where("id", "==", currentUser.uid).onSnapshot(snap =>{
+        this.firestore.collection("users").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
           snap.forEach(userRef => {
             this.firestore.collection("users").doc(userRef.id).update(user)
-            .then((user) => {
-              this.firestore.collection("users").ref.where("email", "==", users.email).onSnapshot(snap => {
-                snap.forEach(userRef => {
-                 
-                  
-                  this.currentUser = userRef.data();
-                  this.setUserStatus(this.currentUser);  //setUserStatus
-                  this.storage.set("users",this.userStatus);
-                  console.log(this.userStatus);
-                  //On success login, navigate to this page
-                  
-                  this.successSignInToast(userRef.data().name); //welcome toast
-                  this.ngZone.run(() => this.router.navigate([Constants.URL_MENU]));
-      
+              .then((user) => {
+                this.firestore.collection("users").ref.where("email", "==", users.email).onSnapshot(snap => {
+                  snap.forEach(userRef => {
+
+                    this.currentUser = userRef.data();
+                    this.setUserStatus(this.currentUser);  //setUserStatus
+                    this.storage.set("users", this.userStatus);
+                    console.log(this.userStatus);
+                    //On success login, navigate to this page
+
+                    this.successSignInToast(userRef.data().name); //welcome toast
+                    this.ngZone.run(() => this.router.navigate([Constants.URL_MENU]));
+
+                  })
                 })
+
+              }).catch(err => {
+                console.log(err);
               })
-             
-            }).catch(err => {
-              console.log(err);
-            })
-           
+
           });
         })
-        
-      }else{
-       
+
+      } else {
+
         //the function is running on refresh so its checking if the user is logged in or not
         //hence the redirect to the login
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
       }
     })
 
-}
+  }
 
 }
 
