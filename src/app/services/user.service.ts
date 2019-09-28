@@ -228,7 +228,7 @@ export class UserService {
         this.currentUser = null;
         //set the listenener to be null, for the UI to react
         this.setUserStatus(null);
-        this.storage.set("users","");
+        this.storage.clear();
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
 
       }).catch((err) => {

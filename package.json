@@ -28,6 +28,7 @@
     "@ionic/storage": "^2.2.0",
     "angularfire2": "^5.2.1",
     "cordova-android": "8.1.0",
+    "cordova-browser": "6.0.0",
     "core-js": "^2.5.4",
     "firebase": "^6.6.1",
     "ngx-qrcode2": "0.0.9",
@@ -84,7 +85,8 @@
       }
     },
     "platforms": [
-      "android"
+      "android",
+      "browser"
     ]
   }
 }
