@@ -257,6 +257,7 @@ export class UserService {
             }
             console.log(this.userStatus)
             this.storage.set("users",this.userStatus);
+            this.account_Details_view();
             // if (userRef.data().role !== "admin") {
             //   this.ngZone.run(() => this.router.navigate(["/menu"]));
             // } else {
@@ -272,6 +273,47 @@ export class UserService {
       }
     })
   }
+
+
+   account_Details_view(){
+
+    this.afAuth.auth.onAuthStateChanged(currentUser => {
+      if (currentUser) {
+        this.firestore.collection("account").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
+          snap.forEach(userRef => {
+             userRef.data();
+            //setUserStatus
+           
+            this.storage.set("account",userRef.data());
+            console.log(userRef.data());
+            // if (userRef.data().role !== "admin") {
+            //   this.ngZone.run(() => this.router.navigate(["/menu"]));
+            // } else {
+            //   this.ngZone.run(() => this.router.navigate(["/admin"]));
+            // }
+          })
+        })
+      } else {
+        
+        //the function is running on refresh so its checking if the user is logged in or not
+        //hence the redirect to the login
+        this.ngZone.run(() => this.router.navigate(["/sign-in"]));
+      }
+    })
+
+
+
+
+
+
+     
+   }
+
+
+
+
+
+
 
 
   async scannedNotification(id) {

@@ -26,6 +26,9 @@ export class ProfilePage implements OnInit {
   public photo_URL:any;
   public UI:any;
   public NIC:any;
+  public Acc_num:any;
+  public loan:any;
+  public amount:any;
 
   profileTitle:String=Constants.PROFILE_TITLE;
   constructor(private firebaseService: UserService,
@@ -45,8 +48,10 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
 
     this.firebaseService.userChanges();
+    
    // this.setTheValue();
     this.getTheValue();
+    this.getAccount_Details();
     this.firebaseService.userStatusChanges.subscribe(x =>this.userStatus =x);
   }
 
@@ -74,6 +79,18 @@ export class ProfilePage implements OnInit {
           }
     })
 
+   }
+
+
+   //acconut details
+   getAccount_Details(){
+    this.storage.get("account").then( (val) =>{
+      if(val){ 
+        this.Acc_num=val.accountnum;
+          this.amount=val.amount;
+          this.loan=val.loan;
+      }
+    })
    }
 
 

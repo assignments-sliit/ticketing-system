@@ -19,38 +19,38 @@
       <div class="logo-img">
 
 
-        <img src="{{ImgSrc}}"/>
+        <img src="{{ImgSrc}}" />
 
 
       </div>
 
     </div>
 
-        <ion-item lines="none">
-            <ion-icon name='person' slot="start" class="list-color"></ion-icon>
-          <ion-label>{{name}}</ion-label>
-        </ion-item>
+    <ion-item lines="none">
+      <ion-icon name='person' slot="start" class="list-color"></ion-icon>
+      <ion-label>{{name}}</ion-label>
+    </ion-item>
 
-        <ion-item lines="none">
-            <ion-icon name='mail' slot="start" class="list-color"></ion-icon>
-          <ion-label>{{user_email}}</ion-label>
-        </ion-item>
-        
-        <ion-item lines="none">
-            <ion-icon name='call' slot="start" class="list-color"></ion-icon>
-          <ion-label>{{phone}}</ion-label>
-        </ion-item>
-        <ion-item lines="none">
-          <ion-icon name='paper' slot="start" class="list-color"></ion-icon>
-        <ion-label>{{NIC}}</ion-label>
-      </ion-item>
+    <ion-item lines="none">
+      <ion-icon name='mail' slot="start" class="list-color"></ion-icon>
+      <ion-label>{{user_email}}</ion-label>
+    </ion-item>
 
-      
-      <ion-button class="ion-float-right" (click)="Profile_update()" padding-top padding-bottom>
-        <ion-icon name='create' slot="start" class="list-color"></ion-icon>
-        <!-- &nbsp; -->
-        Edit profile
-      </ion-button>
+    <ion-item lines="none">
+      <ion-icon name='call' slot="start" class="list-color"></ion-icon>
+      <ion-label>{{phone}}</ion-label>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-icon name='paper' slot="start" class="list-color"></ion-icon>
+      <ion-label>{{NIC}}</ion-label>
+    </ion-item>
+
+
+    <ion-button class="ion-float-right" (click)="Profile_update()" padding-top padding-bottom>
+      <ion-icon name='create' slot="start" class="list-color"></ion-icon>
+      <!-- &nbsp; -->
+      Edit profile
+    </ion-button>
 
 
   </ion-card>
@@ -68,36 +68,33 @@
       Account Details
     </ion-card-subtitle>
 
-    <form [formGroup]="createUserForm" (submit)="Profile_update()">
-      <ion-item>
+    <ion-item lines="none">
+      <ion-icon name="card" slot="start" class="list-color"></ion-icon>
+      <ion-label>AccountNum :</ion-label>
+      <ion-label>{{Acc_num}}</ion-label>
+    </ion-item>
 
-        <ion-input formControlName="username" value={{user_name}} type="text" placeholder="Prefered Username">
 
-        </ion-input>
-      </ion-item>
+    <ion-item lines="none">
+      <ion-icon name="cash" slot="start" class="list-color"></ion-icon>
+      <ion-label>Balances :</ion-label>
+      <ion-label> {{amount}}.00 LKR</ion-label>
+    </ion-item>
 
-      <ion-item>
+    <ion-item lines="none">
+      <ion-icon name="hourglass" slot="start" class="list-color"></ion-icon> 
+      <ion-label>Loan :</ion-label>
+      <ion-label>{{loan}}.00 LKR</ion-label>
+    </ion-item>
 
-        <ion-input formControlName="name" value={{phone}} type="text" placeholder="Your Name">
 
-        </ion-input>
-      </ion-item>
-
-      <ion-item>
-
-        <ion-input formControlName="email" [disabled]="!email" value={{user_email}} type="email"
-          placeholder="Your Email">
-
-        </ion-input>
-      </ion-item>
-
-      <!-- <ion-button type="submit" [disabled]="!createUserForm.valid" class="ion-float-right" padding-top padding-bottom>
+    <!-- <ion-button type="submit" [disabled]="!createUserForm.valid" class="ion-float-right" padding-top padding-bottom>
               <ion-icon name='create' slot="start" class="list-color"></ion-icon>
               &nbsp;
               Edit profile
             </ion-button> -->
 
-    </form>
+
   </ion-card>
 
 
