@@ -24,6 +24,8 @@ export class UsersHomePage implements OnInit {
 
   encodedDataText: any;
 
+  
+
   public user: Observable<User>;
 
   constructor(public userService: UserService,
@@ -34,9 +36,11 @@ export class UsersHomePage implements OnInit {
   ) {
     this.encodedDataText = {}
   }
-
+  userStatus=this.userService.userStatus;
   ngOnInit() {
 
+   this.userService.userChanges()
+   this.userService.userStatusChanges.subscribe(x =>this.userStatus =x);
 
     this.storage.get('users').then((value) => {
       console.log(value.name);

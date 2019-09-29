@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
-
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-process-trip',
   templateUrl: './process-trip.page.html',
@@ -18,10 +18,17 @@ export class ProcessTripPage implements OnInit {
     lng:0
   };
   constructor(public geoLocation:Geolocation,
-    public nativeGeocoder:NativeGeocoder
+    public nativeGeocoder:NativeGeocoder,
+    public userService: UserService
     ) { }
 
+    userStatus=this.userService.userStatus;
   ngOnInit() {
+    this.userService.userChanges()
+    console.log("ptp "+this.userStatus);
+   this.userService.userStatusChanges.subscribe(x =>this.userStatus =x);
+
+
   }
 
   setStart(){

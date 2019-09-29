@@ -135,9 +135,11 @@ export class UserService {
             this.setUserStatus(this.currentUser);  //setUserStatus
             this.storage.set("users",this.userStatus);
 
+
+            this.successSignInToast(userRef.data().name);
             this.router.navigate([Constants.URL_MENU]); //On success login, navigate to this page 
             
-            this.successSignInToast(userRef.data().name); //welcome toast
+            //welcome toast
 
 
           })
@@ -269,6 +271,7 @@ export class UserService {
             
           }
         })
+        
       } else {
         
         //the function is running on refresh so its checking if the user is logged in or not
@@ -289,7 +292,7 @@ export class UserService {
             //setUserStatus
            
             this.storage.set("account",userRef.data());
-            console.log(userRef.data());
+            //console.log(userRef.data());
             // if (userRef.data().role !== "admin") {
             //   this.ngZone.run(() => this.router.navigate(["/menu"]));
             // } else {
@@ -320,9 +323,12 @@ export class UserService {
 
 
 
-  async scannedNotification(id) {
-    this.scannedNotificationPresented=true;
-    const alert = await this.alertController.create({
+   scannedNotification(id) {
+
+     this.afAuth.auth.onAuthStateChanged(async currentUser => {
+      if (currentUser) {
+      this.scannedNotificationPresented=true;
+      const alert =  this.alertController.create({
       header: 'Notification',
       subHeader: 'Your QR has been scanned ',
       message: 'Tap proceed to enter journey details',
@@ -336,20 +342,29 @@ export class UserService {
 
           
         }
+        
       },{
           text:'proceed',
           handler:()=>{
             
             //change to false
-            this.setQrToFalse(id);
-            this.scannedNotificationPresented=false;
             this.ngZone.run(() => this.router.navigate(["/process-trip"]));
+            this.scannedNotificationPresented=false;
+            this.setQrToFalse(id);
+            
           }
       }]
+      
     });
 
-    await alert.present();
+    (await alert).present();
+  
+  }else{
+    this.ngZone.run(() => this.router.navigate(["/menu/users-home"]));
   }
+});
+}
+
 
 
   setQrToFalse(id){
