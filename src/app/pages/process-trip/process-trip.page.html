@@ -1,12 +1,39 @@
 <ion-header>
   <ion-toolbar>
-      <ion-buttons slot="start">
-          <ion-back-button defaultHref="menu/users-home"> </ion-back-button>
-        </ion-buttons>
-    <ion-title>process-trip</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="menu/users-home"> </ion-back-button>
+    </ion-buttons>
+    <ion-title>Process Trip</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Please fill trip details</ion-card-subtitle>
+      <ion-card-title>Trip Info</ion-card-title>
+    </ion-card-header>
 
+    <ion-card-content>
+        <ion-item>
+            <!-- <ion-label position="floating">Enter Start</ion-label> -->
+            <ion-input [(ngModel)]="start"  placeholder="Start"></ion-input>
+            <ion-icon slot="end" [ngClass]="{'input-map':mapIconClass}" name="locate" (click)="setStart()" float-right></ion-icon>
+          </ion-item>
+          <ion-item>
+              <!-- <ion-label position="floating">Enter Destination</ion-label> -->
+              <ion-input [(ngModel)]="destination" placeholder="Destination"></ion-input>
+            </ion-item>
+            <br>  
+            <ion-button expand="block">
+              <ion-icon slot="start" name="navigate"></ion-icon>
+              Proceed
+            </ion-button>
+    </ion-card-content>
+     
+  </ion-card>
+
+  <ion-card *ngIf="isTripInfoFilled">
+    
+  </ion-card>
 </ion-content>

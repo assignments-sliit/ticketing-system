@@ -13,20 +13,26 @@ import { AppRoutingModule } from './app-routing.module';
 //firebase imports
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import  firebaseConfig  from "./credentials";
+import firebaseConfig from "./credentials";
 import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import{ AngularFireAuthModule} from '@angular/fire/auth'; 
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-import {IonicStorageModule} from '@ionic/storage';
-import { AngularFireStorageModule,StorageBucket} from '@angular/fire/storage';
+import { IonicStorageModule } from '@ionic/storage';
+import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
+
+//geocoder & geo locations
+import { Geolocation } from "@ionic-native/geolocation/ngx";
+import { NativeGeocoder } from "@ionic-native/native-geocoder/ngx";
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     IonicModule.forRoot(),
-    IonicStorageModule.forRoot(), 
+    IonicStorageModule.forRoot(),
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
@@ -39,6 +45,8 @@ import { AngularFireStorageModule,StorageBucket} from '@angular/fire/storage';
     StatusBar,
     SplashScreen,
     BarcodeScanner,
+    Geolocation,
+    NativeGeocoder,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -335,7 +335,7 @@ export class UserService {
       },{
           text:'proceed',
           handler:()=>{
-            this.router.navigateByUrl('/process-trip');
+            this.router.navigateByUrl('/dummy-page');
             //change to false
             this.setQrToFalse(id);
             this.scannedNotificationPresented=false;

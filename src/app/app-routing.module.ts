@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'sign-in', loadChildren: './pages/sign-in/sign-in.module#SignInPageModule' },
   { path: 'menu', loadChildren: './pages/user/menu/menu.module#MenuPageModule' },
   { path: 'profile-edit', loadChildren: './pages/user/profile-edit/profile-edit.module#ProfileEditPageModule' },  { path: 'process-trip', loadChildren: './pages/process-trip/process-trip.module#ProcessTripPageModule' },
+  { path: 'dummy-page', loadChildren: './pages/dummy-page/dummy-page.module#DummyPagePageModule' },
 
 
   
