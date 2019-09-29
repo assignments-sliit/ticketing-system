@@ -41,6 +41,7 @@ export class UserService {
     public scannedNotificationPresented:boolean=false;
   public currentUser: any;
   public userStatus: string;
+  public refID:any;
   public userStatusChanges: BehaviorSubject<string> = new BehaviorSubject<string>(this.userStatus);
 
 
@@ -243,18 +244,12 @@ export class UserService {
       if (currentUser) {
         this.firestore.collection("users").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
           snap.forEach(userRef => {
+            this.refID=userRef.id;
             this.currentUser = userRef.data();
             //setUserStatus
             this.setUserStatus(this.currentUser);
 
-            if(this.currentUser.isQrScanned){
-              if(!this.scannedNotificationPresented){
-                this.scannedNotification(userRef.id);
-              }
-            }else{
-              console.log('not scanned');
-              
-            }
+            
             console.log(this.userStatus)
             this.storage.set("users",this.userStatus);
             this.account_Details_view()
@@ -265,6 +260,14 @@ export class UserService {
             //   this.ngZone.run(() => this.router.navigate(["/admin"]));
             // }
           })
+          if(this.currentUser.isQrScanned){
+            if(!this.scannedNotificationPresented){
+              this.scannedNotification(this.refID);
+            }
+          }else{
+            console.log('not scanned');
+            
+          }
         })
       } else {
         
