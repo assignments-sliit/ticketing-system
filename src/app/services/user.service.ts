@@ -134,7 +134,7 @@ export class UserService {
             this.setUserStatus(this.currentUser);  //setUserStatus
             this.storage.set("users",this.userStatus);
 
-            this.router.navigate([Constants.URL_MENU]); //On success login, navigate to this page
+            this.router.navigate([Constants.URL_MENU]); //On success login, navigate to this page 
             
             this.successSignInToast(userRef.data().name); //welcome toast
 
@@ -257,7 +257,8 @@ export class UserService {
             }
             console.log(this.userStatus)
             this.storage.set("users",this.userStatus);
-            this.account_Details_view();
+            this.account_Details_view()
+            
             // if (userRef.data().role !== "admin") {
             //   this.ngZone.run(() => this.router.navigate(["/menu"]));
             // } else {
@@ -335,10 +336,11 @@ export class UserService {
       },{
           text:'proceed',
           handler:()=>{
-            this.router.navigateByUrl('/dummy-page');
+            
             //change to false
             this.setQrToFalse(id);
             this.scannedNotificationPresented=false;
+            this.ngZone.run(() => this.router.navigate(["/process-trip"]));
           }
       }]
     });

@@ -48,7 +48,7 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
 
     this.firebaseService.userChanges();
-    
+   
    // this.setTheValue();
     this.getTheValue();
     this.getAccount_Details();
