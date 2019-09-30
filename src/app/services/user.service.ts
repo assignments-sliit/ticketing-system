@@ -348,15 +348,24 @@ export class UserService {
           handler:()=>{
             
             //change to false
-            this.ngZone.run(() => this.router.navigate(["/process-trip"]));
-            this.scannedNotificationPresented=false;
-            this.setQrToFalse(id);
+             
+             
+             this.setQrToFalse(id);
+             this.scannedNotificationPresented=false;
+            
             
           }
-      }]
+
+         
+
+      }
+      
+    ]
+      
       
     });
 
+    
     (await alert).present();
   
   }else{
@@ -368,7 +377,13 @@ export class UserService {
 
 
   setQrToFalse(id){
-    this.firestore.collection("users").doc(id).update({isQrScanned:false})
+    this.firestore.collection("users").doc(id).update({isQrScanned:false}) .then((user) => {
+     
+      this.ngZone.run(() =>this.router.navigate(["/process-trip"]));
+    }).catch(err => {
+      console.log(err);
+    })
+    
   }
 
   
@@ -414,7 +429,7 @@ async userProfileUpdate(users:User){
         //On success login, navigate to this page
                   // this.setUserStatus(this.currentUser);  //setUserStatus
                   // this.storage.set("users",this.userStatus);
-        this.successSignInToast(this.currentUser.name); //welcome toast
+       // this.successSignInToast(this.currentUser.name); //welcome toast
         this.ngZone.run(() => this.router.navigate([Constants.URL_MENU]));
         
       }else{

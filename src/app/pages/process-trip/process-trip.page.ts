@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { UserService } from 'src/app/services/user.service';
+
 @Component({
   selector: 'app-process-trip',
   templateUrl: './process-trip.page.html',
