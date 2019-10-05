@@ -15,25 +15,87 @@
     </ion-card-header>
 
     <ion-card-content>
-        <ion-item>
-            <!-- <ion-label position="floating">Enter Start</ion-label> -->
-            <ion-input [(ngModel)]="start"  placeholder="Start"></ion-input>
-            <ion-icon slot="end" [ngClass]="{'input-map':mapIconClass}" name="locate" (click)="setStart()" float-right></ion-icon>
-          </ion-item>
-          <ion-item>
-              <!-- <ion-label position="floating">Enter Destination</ion-label> -->
-              <ion-input [(ngModel)]="destination" placeholder="Destination"></ion-input>
-            </ion-item>
-            <br>  
-            <ion-button expand="block">
-              <ion-icon slot="start" name="navigate"></ion-icon>
-              Proceed
-            </ion-button>
+      <ion-item>
+        <!-- <ion-label position="floating">Enter Start</ion-label> -->
+        <ion-input [(ngModel)]="start" disabled="{{isStartDisabled}}" placeholder="Start"></ion-input>
+        <ion-icon slot="end" [ngClass]="{'input-map':mapIconClass}" name="locate" (click)="setStart()" float-right>
+        </ion-icon>
+      </ion-item>
+      <ion-item>
+        <!-- <ion-label position="floating">Enter Destination</ion-label> -->
+        <ion-input [(ngModel)]="destination" placeholder="Destination"></ion-input>
+      </ion-item>
+      <br>
+      <ion-button expand="block" (click)="findRoute()">
+        <ion-icon slot="start" name="navigate"></ion-icon>
+        Proceed
+      </ion-button>
     </ion-card-content>
-     
-  </ion-card>
 
-  <ion-card *ngIf="isTripInfoFilled">
-    
   </ion-card>
+  <div *ngIf="isTripInfoFilled">
+    <ion-card>
+      <ion-card-header>
+
+        <ion-card-subtitle>Your Trip</ion-card-subtitle>
+        <ion-card-title>{{start}} - {{destination}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+
+
+        <ion-item>
+          <ion-label>Distance:</ion-label>
+          <ion-label> {{totalDistance}} KM</ion-label>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-label>Bus Fare:</ion-label>
+          <ion-label> {{busFare}} LKR</ion-label>
+        </ion-item>
+
+
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="isTripInfoFilled">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>Account Details</ion-card-subtitle>
+        <ion-card-title>Account Number - {{accountNumber}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        
+          <ion-item>
+              <ion-label>Available Balance:</ion-label>
+              <ion-label> {{balance}}</ion-label>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>Loan:</ion-label>
+                <ion-label> {{loan}}</ion-label>
+              </ion-item>
+
+            
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col><s></s>
+              <ion-button expand="block" (click)="payByCash()">
+                <ion-icon slot="start" name="cash"></ion-icon>
+                Pay By Cash
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button expand="block" (click)="payByAccount()">
+                <ion-icon slot="start" name="person"></ion-icon>
+                Pay By Account
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

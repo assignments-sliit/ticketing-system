@@ -21,6 +21,8 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
 
+import { LoanReqModalPageModule } from '../app/pages/loan-req-modal/loan-req-modal.module';
+
 //geocoder & geo locations
 import { Geolocation } from "@ionic-native/geolocation/ngx";
 import { NativeGeocoder } from "@ionic-native/native-geocoder/ngx";
@@ -39,7 +41,8 @@ import { NativeGeocoder } from "@ionic-native/native-geocoder/ngx";
     AngularFireAuthModule,
     AngularFireStorageModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LoanReqModalPageModule
   ],
   providers: [
     StatusBar,

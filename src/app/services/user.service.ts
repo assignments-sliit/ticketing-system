@@ -22,7 +22,7 @@ import { AlertController, LoadingController, ToastController } from '@ionic/angu
 import { Observable, BehaviorSubject } from 'rxjs';
 import { loadingController, ToastButton } from '@ionic/core';
 import { Constants } from '../constants/constants';
-import{Storage} from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -35,13 +35,13 @@ export class UserService {
     public loadingCtrl: LoadingController,
     public alertController: AlertController,
     public toastController: ToastController,
-    public storage:Storage
-    ) { }
+    public storage: Storage
+  ) { }
 
-    public scannedNotificationPresented:boolean=false;
+  public scannedNotificationPresented: boolean = false;
   public currentUser: any;
   public userStatus: string;
-  public refID:any;
+  public refID: any;
   public userStatusChanges: BehaviorSubject<string> = new BehaviorSubject<string>(this.userStatus);
 
 
@@ -50,7 +50,7 @@ export class UserService {
     this.userStatusChanges.next(userStatus);
   }
 
-  getUserStatus(){
+  getUserStatus() {
     return this.currentUser;
   }
 
@@ -60,7 +60,7 @@ export class UserService {
     const email = users.email
     const password = users.password
 
-   const res= await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+    const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((userResponse) => {
         // add the user to the "users" database
         let user = {
@@ -68,12 +68,12 @@ export class UserService {
           name: users.name,
           phone: users.phone,
           email: userResponse.user.email,
-          nic:users.nic,
+          nic: users.nic,
           role: users.type,
-          photoURL:users.photoUrl,
-          isQrScanned:false
-          
-         
+          photoURL: users.photoUrl,
+          isQrScanned: false
+
+
 
         }
 
@@ -97,51 +97,54 @@ export class UserService {
         console.log(Constants.UNKNOWN_ERROR_WITH_PARAMETER, err);
       })
 
-      
+
 
   }
 
 
 
   //Accont table 
-  accountcreate(){
+  accountcreate() {
 
-       
-    let account={
-      accountnum:Math.floor(100000 + Math.random() * 900000),
-      nic:this.currentUser.nic,
-      id:this.currentUser.id,
-      email:this.currentUser.email,
-      amount:50,
-      loan:0,
-      date:new Date()
+
+    let account = {
+      accountnum: Math.floor(100000 + Math.random() * 900000),
+      nic: this.currentUser.nic,
+      id: this.currentUser.id,
+      email: this.currentUser.email,
+      amount: 50,
+      loan: 0,
+      date: new Date()
 
     }
-  this.firestore.collection(`account/`).add(account);
-    
+    this.firestore.collection(`account/`).add(account);
 
-}
+
+  }
 
   //Login with Email and password 
   async login(email: string, password: string) {
-  
-   const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password)   //check mail and password 
+    const loading = await this.loadingCtrl.create();
+
+    const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password)   //check mail and password 
       .then((user) => {
         this.firestore.collection("users").ref.where("email", "==", user.user.email).onSnapshot(snap => {
           snap.forEach(userRef => {
             console.log("userRef", userRef.data().name);
-            
+
             this.currentUser = userRef.data();
             this.setUserStatus(this.currentUser);  //setUserStatus
-            this.storage.set("users",this.userStatus);
+            this.storage.set("users", this.userStatus);
 
 
-            this.successSignInToast(userRef.data().name);
+
             this.router.navigate([Constants.URL_MENU]); //On success login, navigate to this page 
-            
+
             //welcome toast
 
-
+            loading.dismiss().then(() => {
+              this.successSignInToast(this.currentUser.name);
+            })
           })
         })
 
@@ -161,7 +164,7 @@ export class UserService {
       )
 
 
-
+    return await loading.present();
   }
 
 
@@ -225,7 +228,7 @@ export class UserService {
   }
 
   async logOut() {
-   this.afAuth.auth.signOut()
+    this.afAuth.auth.signOut()
       .then(() => {
         console.log(Constants.SIGN_OUT_SUCCESSFUL);
         //set current user to null to be logged out
@@ -246,34 +249,34 @@ export class UserService {
       if (currentUser) {
         this.firestore.collection("users").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
           snap.forEach(userRef => {
-            this.refID=userRef.id;
+            this.refID = userRef.id;
             this.currentUser = userRef.data();
             //setUserStatus
             this.setUserStatus(this.currentUser);
 
-            
+
             console.log(this.userStatus)
-            this.storage.set("users",this.userStatus);
+            this.storage.set("users", this.userStatus);
             this.account_Details_view()
-            
+
             // if (userRef.data().role !== "admin") {
             //   this.ngZone.run(() => this.router.navigate(["/menu"]));
             // } else {
             //   this.ngZone.run(() => this.router.navigate(["/admin"]));
             // }
           })
-          if(this.currentUser.isQrScanned){
-            if(!this.scannedNotificationPresented){
+          if (this.currentUser.isQrScanned) {
+            if (!this.scannedNotificationPresented) {
               this.scannedNotification(this.refID);
             }
-          }else{
+          } else {
             console.log('not scanned');
-            
+
           }
         })
-        
+
       } else {
-        
+
         //the function is running on refresh so its checking if the user is logged in or not
         //hence the redirect to the login
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
@@ -282,16 +285,16 @@ export class UserService {
   }
 
 
-   account_Details_view(){
+  account_Details_view() {
 
     this.afAuth.auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
         this.firestore.collection("account").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
           snap.forEach(userRef => {
-             userRef.data();
+            userRef.data();
             //setUserStatus
-           
-            this.storage.set("account",userRef.data());
+
+            this.storage.set("account", userRef.data());
             //console.log(userRef.data());
             // if (userRef.data().role !== "admin") {
             //   this.ngZone.run(() => this.router.navigate(["/menu"]));
@@ -301,7 +304,7 @@ export class UserService {
           })
         })
       } else {
-        
+
         //the function is running on refresh so its checking if the user is logged in or not
         //hence the redirect to the login
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
@@ -313,8 +316,8 @@ export class UserService {
 
 
 
-     
-   }
+
+  }
 
 
 
@@ -323,124 +326,124 @@ export class UserService {
 
 
 
-   scannedNotification(id) {
+  scannedNotification(id) {
 
-     this.afAuth.auth.onAuthStateChanged(async currentUser => {
+    this.afAuth.auth.onAuthStateChanged(async currentUser => {
       if (currentUser) {
-      this.scannedNotificationPresented=true;
-      const alert =  this.alertController.create({
-      header: 'Notification',
-      subHeader: 'Your QR has been scanned ',
-      message: 'Tap proceed to enter journey details',
-      buttons: [{
-        text:'cancel journey',
-        handler:()=>{
-          console.log('trip cancelled!');
-          //change to false
-          this.setQrToFalse(id);
-          this.scannedNotificationPresented=false;
+        this.scannedNotificationPresented = true;
+        const alert = this.alertController.create({
+          header: 'Notification',
+          subHeader: 'Your QR has been scanned ',
+          message: 'Tap proceed to enter journey details',
+          buttons: [{
+            text: 'cancel journey',
+            handler: () => {
+              console.log('trip cancelled!');
+              //change to false
+              this.setQrToFalse(id);
+              this.scannedNotificationPresented = false;
 
-          
-        }
-        
-      },{
-          text:'proceed',
-          handler:()=>{
-            
-            //change to false
-             
-             
-             this.setQrToFalse(id);
-             this.scannedNotificationPresented=false;
-            
-            
+
+            }
+
+          }, {
+            text: 'proceed',
+            handler: () => {
+
+              //change to false
+
+
+              this.setQrToFalse(id);
+              this.scannedNotificationPresented = false;
+
+
+            }
+
+
+
           }
 
-         
+          ]
 
+
+        });
+
+
+        (await alert).present();
+
+      } else {
+        this.ngZone.run(() => this.router.navigate(["/menu/users-home"]));
       }
-      
-    ]
-      
-      
     });
-
-    
-    (await alert).present();
-  
-  }else{
-    this.ngZone.run(() => this.router.navigate(["/menu/users-home"]));
   }
-});
-}
 
 
 
-  setQrToFalse(id){
-    this.firestore.collection("users").doc(id).update({isQrScanned:false}) .then((user) => {
-     
-      this.ngZone.run(() =>this.router.navigate(["/process-trip"]));
+  setQrToFalse(id) {
+    this.firestore.collection("users").doc(id).update({ isQrScanned: false }).then((user) => {
+
+      this.ngZone.run(() => this.router.navigate(["/process-trip"]));
     }).catch(err => {
       console.log(err);
     })
-    
-  }
-
-  
-//user profile update
-async userProfileUpdate(users:User){
-
-  let user = {
-    
-   // email: users.email,
-    phone: users.phone,
-    name: users.name,
-    nic:users.nic,
-    photoURL:users.photoUrl
-    
 
   }
+
+
+  //user profile update
+  async userProfileUpdate(users: User) {
+
+    let user = {
+
+      // email: users.email,
+      phone: users.phone,
+      name: users.name,
+      nic: users.nic,
+      photoURL: users.photoUrl
+
+
+    }
 
     this.afAuth.auth.onAuthStateChanged(currentUser => {
-      if(currentUser){
+      if (currentUser) {
 
-        this.firestore.collection("users").ref.where("id", "==", currentUser.uid).onSnapshot(snap =>{
+        this.firestore.collection("users").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
           snap.forEach(userRef => {
             this.firestore.collection("users").doc(userRef.id).update(user)
-            .then((user) => {
-              // this.firestore.collection("users").ref.where("id", "==", currentUser.uid ).onSnapshot(snap => {
-              //   snap.forEach(userRef => {
-                 
-                  
-              //     this.currentUser = userRef.data();
-                  
-                 
-      
-              //   })
-              // })
-             
-            }).catch(err => {
-              console.log(err);
-            })
-           
+              .then((user) => {
+                // this.firestore.collection("users").ref.where("id", "==", currentUser.uid ).onSnapshot(snap => {
+                //   snap.forEach(userRef => {
+
+
+                //     this.currentUser = userRef.data();
+
+
+
+                //   })
+                // })
+
+              }).catch(err => {
+                console.log(err);
+              })
+
           });
         })
         console.log(this.userStatus);
         //On success login, navigate to this page
-                  // this.setUserStatus(this.currentUser);  //setUserStatus
-                  // this.storage.set("users",this.userStatus);
-       // this.successSignInToast(this.currentUser.name); //welcome toast
+        // this.setUserStatus(this.currentUser);  //setUserStatus
+        // this.storage.set("users",this.userStatus);
+        // this.successSignInToast(this.currentUser.name); //welcome toast
         this.ngZone.run(() => this.router.navigate([Constants.URL_MENU]));
-        
-      }else{
-       
+
+      } else {
+
         //the function is running on refresh so its checking if the user is logged in or not
         //hence the redirect to the login
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
       }
     })
 
-}
+  }
 
 }
 
