@@ -12,7 +12,7 @@ import { Storage } from '@ionic/storage';
 export class MenuPage implements OnInit {
 
 
-  imgsrc:string="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
+  imgsrc: string = "https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
 
   public user_name: any;
   public user_email: any;
@@ -47,12 +47,14 @@ export class MenuPage implements OnInit {
     });
   }
 
+
   userStatus = this.firebaseService.userStatus;
   ngOnInit() {
-
-
-
+    this.firebaseService.userChanges();
+    this.getTheValue();
+    this.firebaseService.userStatusChanges.subscribe(x => this.userStatus = x);
   }
+
 
   async getTheValue() {
 
@@ -63,30 +65,23 @@ export class MenuPage implements OnInit {
         this.user_email = val.email;
         //this.photo_URL = val.photoURL;
         this.UI = val.id;
-        if(val.photoURL){
-          this.imgsrc=val.photoURL;
-          console.log("urIMG"+val.photoURL);
-        }else{
-          this.imgsrc="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
-
+        if (val.photoURL) {
+          this.imgsrc = val.photoURL;
+          console.log("urIMG" + val.photoURL);
+        } else {
+          this.imgsrc = "https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
         }
-        
-        
-        
-      }else{
-        this.imgsrc="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
-
+      } else {
+        this.imgsrc = "https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
       }
     })
-
   }
+
 
   ionViewWillEnter() {
-    this.firebaseService.userChanges();
-    this.getTheValue();
 
-    this.firebaseService.userStatusChanges.subscribe(x => this.userStatus = x);
   }
+
 
   logout() {
     this.firebaseService.logOut();

@@ -10,5 +10,25 @@
 </ion-header>
 
 <ion-content>
-
+    <div *ngIf="timeTableClient">
+        <ion-card *ngFor="let item of timeTable" class="ion-padding">
+          <ion-card-header>
+            <ion-card-subtitle>
+              Route Number: {{item.routenum}}
+            </ion-card-subtitle>
+            <ion-card-title>
+              {{item.from}} - {{item.to}}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              Bus Number: {{item.busnumber}}
+            </ion-item>
+            <ion-item>
+               Starts at: {{item.time}} <br/> on {{item.date}}
+              </ion-item>
+          </ion-card-content>
+      
+          </ion-card>
+      </div>
 </ion-content>

@@ -38,7 +38,6 @@ export class ProcessTripPage implements OnInit {
     public nativeGeocoder: NativeGeocoder,
     public userService: UserService,
     private firestore: AngularFirestore,
-
     public alertController: AlertController,
     public loadingCtrl: LoadingController,
     public modalController: ModalController,
@@ -50,10 +49,14 @@ export class ProcessTripPage implements OnInit {
   }
 
   userStatus = this.userService.userStatus;
-  ngOnInit() {
-    this.userService.userChanges()
-    this.userService.userStatusChanges.subscribe(x => this.userStatus = x);
 
+
+  ngOnInit() {
+
+    this.userService.userChanges();
+    this.userService.userStatusChanges.subscribe(
+      x => this.userStatus = x
+    );
 
   }
 
@@ -70,13 +73,10 @@ export class ProcessTripPage implements OnInit {
       console.log('Latitude: ' + response.coords.longitude);
 
       this.isStartDisabled = true;
-      this.start = "Your Location";
-
+      if (this.isStartDisabled) {
+        this.start = "Your Location";
+      }
     })
-
-    //this.start=
-    // this.getAddressFromCoords(this.currentLocation.lat,this.currentLocation.lng);
-
   }
 
   getAddressFromCoords(lat, lng) {
@@ -89,71 +89,65 @@ export class ProcessTripPage implements OnInit {
       .then((result: NativeGeocoderReverseResult[]) => {
         result.forEach(element => {
           console.log(element);
-
         });
-
       }).catch(err => {
         console.log(err);
       })
-
   }
 
 
   async findRoute() {
-    const loading = await this.loadingCtrl.create();
+    var startpoint: any;
+    const loading = await this.loadingCtrl.create({
+      message: 'Calculating Distance...'
+    });
 
+    if (this.start !== "Your Location") {
+      startpoint = this.start
+    } else {
+      startpoint = this.currentLocation;
+    }
 
     this.distanceMatrixService.getDistanceMatrix({
-      origins: [this.currentLocation],
+      origins: [startpoint],
       destinations: [this.destination],
-      travelMode: 'DRIVING',
+      travelMode: 'TRANSIT',
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: true,
       avoidTolls: true
-    }, (response, status) => {
-      if (status != 'OK') {
-        console.log('Error getting direction');
+    },
+      (response, status) => {
 
-      } else {
-        console.log('Response :' + JSON.stringify(response));
+        if (status != 'OK') {
+          console.log('Error getting direction');
+        } else {
+          this.x = response.rows[0].elements[0].distance.text.split(" ");
+          this.totalDistance = this.x[0];
+          this.busFare = this.totalDistance * 4; //  4/= per KM :)
 
-        this.x = response.rows[0].elements[0].distance.text.split(" ");
-        this.totalDistance = this.x[0];
-
-        this.busFare = this.totalDistance * 4; //  4/= per KM :)
-
-        //get acc details
-        //this.firestore.collection("users").ref.where("email", "==", user.user.email)
-
-
-        this.storage.get("account").then((val) => {
-          if (val) {
-            this.accountNumber = val.accountnum;
-            this.firestore.collection('account').ref.where('accountnum','==',this.accountNumber).onSnapshot(snap=>{
-              snap.forEach(ref=>{
-                this.balance = ref.data().amount;
-                this.loan=ref.data().loan;
+          this.storage.get("account").then((val) => {
+            if (val) {
+              this.accountNumber = val.accountnum;
+              this.firestore.collection('account').ref.where('accountnum', '==', this.accountNumber).onSnapshot(snap => {
+                snap.forEach(ref => {
+                  this.balance = ref.data().amount;
+                  this.loan = ref.data().loan;
+                })
               })
+            }
+          }).then(() => {
+            loading.dismiss().then(() => {
+              this.setInfoFilledTrue();
             })
-            
-            
-            
-          }
-
-        }).then(() => {
-          loading.dismiss().then(() => {
-            this.setInfoFilledTrue();
           })
-        })
-      }
-    })
+        }
+      })
     return await loading.present();
   }
 
 
   setInfoFilledTrue() {
     this.isTripInfoFilled = true;
-
   }
 
 
@@ -175,12 +169,13 @@ export class ProcessTripPage implements OnInit {
     await alert.present();
   }
 
-  async payByAccount() {
-    if (this.busFare > this.balance) {
 
+  async payByAccount() {
+
+    if (this.busFare > this.balance) {
       const alert = await this.alertController.create({
         header: 'Account',
-        message: 'Your Bus fare exceeds the balance. Do you want to obtain a loan?',
+        message: 'The Bus fare exceeds the account balance. Do you want to obtain a loan?',
         buttons: [
           {
             text: 'Not now',
@@ -189,7 +184,7 @@ export class ProcessTripPage implements OnInit {
             handler: (blah) => {
               console.log('loan Cancel');
             }
-          }, 
+          },
           {
             text: 'Yes',
             handler: () => {
@@ -201,29 +196,31 @@ export class ProcessTripPage implements OnInit {
       });
 
       await alert.present();
-    }else{
-      this.balance=this.balance-this.busFare;
-      this.firestore.collection('account').ref.where('accountnum','==',this.accountNumber).onSnapshot(snap=>{
-        snap.forEach(ref=>{
-          this.firestore.collection("account").doc(ref.id).update({amount:this.balance})
-          .then((user) => {
-           
-          }).catch(err => {
-            console.log(err);
-          })
 
+    } else {
+      var s = true;
+      this.balance = this.balance - this.busFare;
+      this.firestore.collection('account').ref.where('accountnum', '==', this.accountNumber).onSnapshot(snap => {
+        snap.forEach(ref => {
+          if (s) {
+            this.firestore.collection("account").doc(ref.id).update({ amount: this.balance }).then(() => {
+              s = false;
+            })
+              .catch(err => {
+                console.log(err);
+              })
+          }
         })
-        
       })
       this.payByCard();
     }
   }
 
 
-  async payByCard () {
+  async payByCard() {
     const alert = await this.alertController.create({
       header: 'Card Payment',
-      message: 'Your Payment payed Successfully Amount ' + this.busFare + ' .00LKR. Available Blanace '+this.balance+'.00 LKR Thank you!',
+      message: 'Your payment of ' + this.busFare + 'LKR has been made successfully! Available Blanace is ' + this.balance + 'LKR Thank you!',
       buttons: [
         {
           text: 'Okay',
@@ -239,19 +236,19 @@ export class ProcessTripPage implements OnInit {
   }
 
 
+  async presentLoanModal() {
 
-
-
-
-
-
-  async presentLoanModal(){
     const modal = await this.modalController.create({
       component: LoanReqModalPage,
-      componentProps:{
-        'accountNumber':this.accountNumber,
+      componentProps: {
+        'accountNumber': this.accountNumber,
+        'balance': this.balance,
+        'loanAmount': this.loan
       }
     });
+    console.log(this.balance);
+    console.log(this.loan);
+
     return await modal.present();
   }
 

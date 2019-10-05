@@ -1,59 +1,38 @@
 <ion-content class="ion-padding bg-color">
-  <!-- <div class="logo">
-    <div class="logo-img">
-      <img src="../../../assets/img/logo.png"/>
-    </div>
-  </div> -->
 
-<h2 style="text-align: center">Sign in to Travel Mate</h2>
+  <h2 style="text-align: center">Sign in to Travel Mate</h2>
   <ion-card padding>
-      <form [formGroup]="userLoginForm" (ngSubmit)="userLogin(userLoginForm.value)" class="login-form">
-          <ion-item class="login-list">
-            <ion-label position="fixed">{{lblEmail}}</ion-label>
-            <ion-input formControlName="email" type="email" class="input-text">
-      
-            </ion-input>
-          </ion-item>
-          <ion-item class="login-list">
-            <ion-label position="fixed">{{lblPassword}}</ion-label>
-            <ion-input formControlName="password" type="password" class="input-text">
-      
-            </ion-input>
-          </ion-item>
-          <br />
-          <br />
-      
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                <ion-button expand="block" (click)="goToSignUp()" class="login-btn">
-                  {{btnSignUpText}}
-                </ion-button>
-              </ion-col>
-              <ion-col>
-                <ion-button expand="block" type="submit" [disabled]="!userLoginForm.valid" class="login-btn">
-                  {{btnSignInText}}
-                </ion-button>
-              </ion-col>
-            </ion-row>        
-      
-          </ion-grid>
-        </form>
+    <form [formGroup]="userLoginForm" (ngSubmit)="userLogin(userLoginForm.value)" class="login-form">
+      <ion-item class="login-list">
+        <ion-label position="fixed">{{lblEmail}}</ion-label>
+        <ion-input formControlName="email" type="email" class="input-text">
+
+        </ion-input>
+      </ion-item>
+      <ion-item class="login-list">
+        <ion-label position="fixed">{{lblPassword}}</ion-label>
+        <ion-input formControlName="password" type="password" class="input-text">
+
+        </ion-input>
+      </ion-item>
+      <br />
+      <br />
+
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button expand="block" (click)="goToSignUp()" class="login-btn">
+              {{btnSignUpText}}
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button expand="block" type="submit" [disabled]="!userLoginForm.valid" class="login-btn">
+              {{btnSignInText}}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
+    </form>
   </ion-card>
-  <ion-row>
-      <ion-col>
-        <ion-button expand="block">
-          <ion-icon slot="start" name="logo-google"></ion-icon>
-          Sign in using google
-        </ion-button>
-      </ion-col>
-      <ion-col>
-
-        <ion-button expand="block">
-          <ion-icon slot="start" name="logo-facebook"></ion-icon>
-          Sign in using facebook
-
-        </ion-button>
-      </ion-col>
-    </ion-row>
 </ion-content>

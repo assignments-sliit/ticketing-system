@@ -50,8 +50,14 @@ export class UserService {
     this.userStatusChanges.next(userStatus);
   }
 
+
   getUserStatus() {
     return this.currentUser;
+  }
+
+
+  view_timetable(): Observable<any> {
+    return this.firestore.collection<any>("Timetable").valueChanges();
   }
 
 
@@ -72,9 +78,6 @@ export class UserService {
           role: users.type,
           photoURL: users.photoUrl,
           isQrScanned: false
-
-
-
         }
 
         //add the user to the database
@@ -85,28 +88,21 @@ export class UserService {
               console.log(x.data());
               this.currentUser = x.data();
               this.setUserStatus(this.currentUser);
+              this.accountcreate();
               this.router.navigate(["/sign-in"]);
             })
           }).catch(err => {
             console.log(err);
           })
-
-
       })
       .catch((err) => {
         console.log(Constants.UNKNOWN_ERROR_WITH_PARAMETER, err);
       })
-
-
-
   }
-
 
 
   //Accont table 
   accountcreate() {
-
-
     let account = {
       accountnum: Math.floor(100000 + Math.random() * 900000),
       nic: this.currentUser.nic,
@@ -115,39 +111,38 @@ export class UserService {
       amount: 50,
       loan: 0,
       date: new Date()
-
     }
     this.firestore.collection(`account/`).add(account);
-
-
   }
 
   //Login with Email and password 
   async login(email: string, password: string) {
-    const loading = await this.loadingCtrl.create();
+
 
     const res = await this.afAuth.auth.signInWithEmailAndPassword(email, password)   //check mail and password 
-      .then((user) => {
+      .then(async (user) => {
+        const loading = await this.loadingCtrl.create({
+          message: 'Logging in...'
+        });
         this.firestore.collection("users").ref.where("email", "==", user.user.email).onSnapshot(snap => {
-          snap.forEach(userRef => {
+          loading.dismiss().then(() => {
+            //this.successSignInToast(this.currentUser.name);
+            console.log('Login Successful');
+
+          })
+          snap.forEach(async userRef => {
             console.log("userRef", userRef.data().name);
 
             this.currentUser = userRef.data();
             this.setUserStatus(this.currentUser);  //setUserStatus
             this.storage.set("users", this.userStatus);
-
-
-
             this.router.navigate([Constants.URL_MENU]); //On success login, navigate to this page 
-
-            //welcome toast
-
-            loading.dismiss().then(() => {
-              this.successSignInToast(this.currentUser.name);
-            })
+            
+            
+            
           })
         })
-
+        return await loading.present();
       }).catch(err => {
         console.log(err.code);
 
@@ -159,12 +154,11 @@ export class UserService {
           this.userNotFound();
         } else if (err.code == Constants.FIREBASE_AUTH_TOO_MANY_REQUESTS) {
           this.tooManyRequests();
+
         }
-      }
-      )
+      })
 
-
-    return await loading.present();
+    
   }
 
 
@@ -179,10 +173,10 @@ export class UserService {
   async tooManyRequests() {
 
     const alert = await this.alertController.create({
-      header: 'Too much req',
-      subHeader: 'Subtitle',
-      message: 'This is an alert message.',
-      buttons: ['OK']
+      header: 'Too much requests',
+      subHeader: 'Too much login request',
+      message: 'Please sit back and sign in a bit later',
+      buttons: ['Okay']
     });
 
     await alert.present();
@@ -217,10 +211,10 @@ export class UserService {
   async userNotFound() {
 
     const alert = await this.alertController.create({
-      header: 'User not Found',
-      subHeader: 'Subtitle',
-      message: 'This is an alert message.',
-      buttons: ['OK']
+      header: 'User Not Found',
+      subHeader: 'User is not found for the email',
+      message: 'Please check your email ID and try again',
+      buttons: ['Okay']
     });
 
     await alert.present();
@@ -253,17 +247,9 @@ export class UserService {
             this.currentUser = userRef.data();
             //setUserStatus
             this.setUserStatus(this.currentUser);
-
-
             console.log(this.userStatus)
             this.storage.set("users", this.userStatus);
-            this.account_Details_view()
-
-            // if (userRef.data().role !== "admin") {
-            //   this.ngZone.run(() => this.router.navigate(["/menu"]));
-            // } else {
-            //   this.ngZone.run(() => this.router.navigate(["/admin"]));
-            // }
+            this.account_Details_view();
           })
           if (this.currentUser.isQrScanned) {
             if (!this.scannedNotificationPresented) {
@@ -271,7 +257,6 @@ export class UserService {
             }
           } else {
             console.log('not scanned');
-
           }
         })
 
@@ -286,21 +271,13 @@ export class UserService {
 
 
   account_Details_view() {
-
     this.afAuth.auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
         this.firestore.collection("account").ref.where("id", "==", currentUser.uid).onSnapshot(snap => {
           snap.forEach(userRef => {
             userRef.data();
             //setUserStatus
-
             this.storage.set("account", userRef.data());
-            //console.log(userRef.data());
-            // if (userRef.data().role !== "admin") {
-            //   this.ngZone.run(() => this.router.navigate(["/menu"]));
-            // } else {
-            //   this.ngZone.run(() => this.router.navigate(["/admin"]));
-            // }
           })
         })
       } else {
@@ -310,21 +287,7 @@ export class UserService {
         this.ngZone.run(() => this.router.navigate(["/sign-in"]));
       }
     })
-
-
-
-
-
-
-
   }
-
-
-
-
-
-
-
 
   scannedNotification(id) {
 
@@ -340,35 +303,21 @@ export class UserService {
             handler: () => {
               console.log('trip cancelled!');
               //change to false
-              this.setQrToFalse(id);
+              this.setQrToFalseToo(id);
               this.scannedNotificationPresented = false;
-
-
             }
 
           }, {
             text: 'proceed',
             handler: () => {
-
               //change to false
-
-
               this.setQrToFalse(id);
               this.scannedNotificationPresented = false;
-
-
             }
-
-
-
           }
 
           ]
-
-
         });
-
-
         (await alert).present();
 
       } else {
@@ -377,31 +326,28 @@ export class UserService {
     });
   }
 
+  setQrToFalseToo(id) {
+    this.firestore.collection("users").doc(id).update({ isQrScanned: false });
+  }
 
 
   setQrToFalse(id) {
     this.firestore.collection("users").doc(id).update({ isQrScanned: false }).then((user) => {
-
       this.ngZone.run(() => this.router.navigate(["/process-trip"]));
     }).catch(err => {
       console.log(err);
     })
-
   }
 
 
   //user profile update
   async userProfileUpdate(users: User) {
-
     let user = {
-
       // email: users.email,
       phone: users.phone,
       name: users.name,
       nic: users.nic,
       photoURL: users.photoUrl
-
-
     }
 
     this.afAuth.auth.onAuthStateChanged(currentUser => {
@@ -411,16 +357,6 @@ export class UserService {
           snap.forEach(userRef => {
             this.firestore.collection("users").doc(userRef.id).update(user)
               .then((user) => {
-                // this.firestore.collection("users").ref.where("id", "==", currentUser.uid ).onSnapshot(snap => {
-                //   snap.forEach(userRef => {
-
-
-                //     this.currentUser = userRef.data();
-
-
-
-                //   })
-                // })
 
               }).catch(err => {
                 console.log(err);
@@ -430,11 +366,7 @@ export class UserService {
         })
         console.log(this.userStatus);
         //On success login, navigate to this page
-        // this.setUserStatus(this.currentUser);  //setUserStatus
-        // this.storage.set("users",this.userStatus);
-        // this.successSignInToast(this.currentUser.name); //welcome toast
         this.ngZone.run(() => this.router.navigate([Constants.URL_MENU]));
-
       } else {
 
         //the function is running on refresh so its checking if the user is logged in or not

@@ -17,15 +17,9 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 export class UsersHomePage implements OnInit {
 
   userHomeTitle: String = Constants.USER_HOME_TITLE;
-
   barcodeScannerOptions: BarcodeScannerOptions; //not needed
-
   encodedData: any;
-
   encodedDataText: any;
-
-  
-
   public user: Observable<User>;
 
   constructor(public userService: UserService,
@@ -36,7 +30,10 @@ export class UsersHomePage implements OnInit {
   ) {
     this.encodedDataText = {}
   }
+
   userStatus=this.userService.userStatus;
+
+
   ngOnInit() {
 
    this.userService.userChanges()
@@ -54,9 +51,6 @@ export class UsersHomePage implements OnInit {
       console.log(value.isQrScanned);
 
     });
-
-
-
   }
 
 

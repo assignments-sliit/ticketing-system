@@ -33,17 +33,16 @@ export class SignInPage implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    // throw new Error("Method not implemented.");
+  ngOnInit() {
   }
 
 
-   userLogin(formData: FormData) {
+  userLogin(formData: FormData) {
     this.userService.login(formData["email"], formData["password"]);
-
   }
 
-  goToSignUp(){
+  
+  goToSignUp() {
     this.router.navigate([Constants.URL_SIGN_UP]);
   }
 }

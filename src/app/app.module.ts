@@ -13,7 +13,6 @@ import { AppRoutingModule } from './app-routing.module';
 //firebase imports
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import firebaseConfig from "./credentials";
 import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireAuthModule } from '@angular/fire/auth';

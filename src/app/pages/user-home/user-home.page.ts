@@ -8,17 +8,13 @@ import { UserService } from "../../services/user.service";
 })
 export class UserHomePage implements OnInit {
 
-  constructor(private firebaseService:UserService) { }
+  constructor(private firebaseService: UserService) { }
 
-  userStatus=this.firebaseService.userStatus;
-     ngOnInit() {
+  userStatus = this.firebaseService.userStatus;
+  ngOnInit() {
 
-     
-        this.firebaseService.userChanges();
-       
-      // this.firebaseService.userStatusChanges.subscribe(x =>this.userStatus =x);
-     }
+    this.firebaseService.userChanges();
 
-
+  }
 
 }

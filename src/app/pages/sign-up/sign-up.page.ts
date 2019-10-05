@@ -33,18 +33,9 @@ export class SignUpPage implements OnInit {
   }
 
   ngOnInit() {
-    /**
-     * if(storage.get('userType') == 'admin'){
-     *  loadPage();
-     * }else{
-     * alert('no permission')
-     * router.navigate('/login')
-     * }
-     * 
-     */
+
   }
 
-  //async createUser
 
   async createUser() {
     const loading = await this.loadingCtrl.create();
@@ -62,15 +53,7 @@ export class SignUpPage implements OnInit {
     this.userService.signUp(user);
   }
 
-
-
-    //send data to the service
-
     
-
-    
-
-
   }
 
 
