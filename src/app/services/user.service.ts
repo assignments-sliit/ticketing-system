@@ -66,8 +66,18 @@ export class UserService {
     const email = users.email
     const password = users.password
 
-    const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
-      .then((userResponse) => {
+    if(!users.nic.match('[0-9]{9}[x|X|v|V]$')){
+      this.invalidNic();
+    }
+    // else if(!users.phone.match('^7|(?:\+94)[0-9]{9,10}$')){
+    //   this.invalidPhone();
+    // }
+    else{
+      const res = await this.afAuth.auth.createUserWithEmailAndPassword(email, password)
+      .then(async (userResponse) => {
+        const loading = await this.loadingCtrl.create({
+          message: 'Logging in...'
+        });
         // add the user to the "users" database
         let user = {
           id: userResponse.user.uid,
@@ -82,8 +92,12 @@ export class UserService {
 
         //add the user to the database
         this.firestore.collection("users").add(user)
-          .then(user => {
+          .then(async user => {
+           
             user.get().then(x => {
+              loading.dismiss().then(() => {
+                console.log('Login Successful');
+              })
               //return the user data
               console.log(x.data());
               this.currentUser = x.data();
@@ -91,14 +105,24 @@ export class UserService {
               this.accountcreate();
               this.router.navigate(["/sign-in"]);
             })
+            return await loading.present();
           }).catch(err => {
             console.log(err);
           })
       })
       .catch((err) => {
-        console.log(Constants.UNKNOWN_ERROR_WITH_PARAMETER, err);
+        console.log(err.code);
+        
+        //console.log(Constants.UNKNOWN_ERROR_WITH_PARAMETER, err);
+        if (err.code == 'auth/email-already-in-use') {
+          this.existingEmail();
+        }else if (err.code == Constants.FIREBASE_AUTH_INVALID_EMAIL_CODE) {
+          this.incorrectEmailAlert();
+        }
       })
+    }
   }
+
 
 
   //Accont table 
@@ -193,6 +217,42 @@ export class UserService {
 
     await alert.present();
 
+  }
+  async existingEmail() {
+
+    const alert = await this.alertController.create({
+      header: 'Sign Up Failed',
+      subHeader: 'Email Already Exists',
+      message: 'The email you entered is already in use by another account.',
+      buttons: ['Okay']
+    });
+
+    await alert.present();
+
+  }
+
+  async invalidNic() {
+
+    const alert = await this.alertController.create({
+      header: 'Sign Up Failed',
+      subHeader: 'Incorrect NIC',
+      message: 'The nic you entered is invalid',
+      buttons: ['Okay']
+    });
+
+    await alert.present();
+
+  }
+
+  async invalidPhone() {
+    const alert = await this.alertController.create({
+      header: 'Sign Up Failed',
+      subHeader: 'Incorrect Phone Number',
+      message: 'The phone number you entered is invalid',
+      buttons: ['Okay']
+    });
+
+    await alert.present();
   }
 
   async incorrectEmailAlert() {

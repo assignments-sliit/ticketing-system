@@ -21,12 +21,13 @@ export class UsersHomePage implements OnInit {
   encodedData: any;
   encodedDataText: any;
   public user: Observable<User>;
-
+  public unsubscribeBackEvent: any;
   constructor(public userService: UserService,
     private barcodeScanner: BarcodeScanner,
     public storage: Storage,
     private firestoreService: AngularFirestore,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private platform: Platform
   ) {
     this.encodedDataText = {}
   }
@@ -35,6 +36,7 @@ export class UsersHomePage implements OnInit {
 
 
   ngOnInit() {
+    this.initializeBackButtonCustomHandler();
 
    this.userService.userChanges()
    this.userService.userStatusChanges.subscribe(x =>this.userStatus =x);
@@ -51,6 +53,40 @@ export class UsersHomePage implements OnInit {
       console.log(value.isQrScanned);
 
     });
+  }
+  ionViewWillLeave() {
+    // Unregister the custom back button action for this page
+    this.unsubscribeBackEvent && this.unsubscribeBackEvent();
+  }
+ 
+
+  initializeBackButtonCustomHandler(): void {
+    this.unsubscribeBackEvent = this.platform.backButton.subscribeWithPriority(999999,  async () => {
+        //alert("back pressed home" + this.constructor.name);
+        const alert = await this.alertController.create({
+          header: 'Leave',
+          message: 'Are you sure want to logout?',
+          buttons: [
+            {
+              text: 'Yes',
+              handler: () => {
+                this.userService.logOut();
+              }
+            },{
+              text:'No',
+              handler:()=>{
+                console.log('Stays in app')
+              }
+            }
+          ]
+        });
+    
+        await alert.present();
+    });
+
+    
+    /* here priority 101 will be greater then 100 
+    if we have registerBackButtonAction in app.component.ts */
   }
 
 

@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'profile-edit', loadChildren: './pages/user/profile-edit/profile-edit.module#ProfileEditPageModule' },  { path: 'process-trip', loadChildren: './pages/process-trip/process-trip.module#ProcessTripPageModule' },
   { path: 'dummy-page', loadChildren: './pages/dummy-page/dummy-page.module#DummyPagePageModule' },
   { path: 'loan-req-modal', loadChildren: './pages/loan-req-modal/loan-req-modal.module#LoanReqModalPageModule' },
+  { path: 'top-up', loadChildren: './pages/top-up/top-up.module#TopUpPageModule' },
 
 
   

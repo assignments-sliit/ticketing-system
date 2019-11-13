@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Constants } from '../../../constants/constants';
 import { Storage } from '@ionic/storage';
 import { UserService } from '../../../services/user.service';
-import { Router, RouterEvent } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { User } from '../../../models/user'
 
@@ -93,6 +93,15 @@ export class ProfilePage implements OnInit {
   // view and last one view 
   Profile_update() {
     this.router.navigate(["/profile-edit"]);
+  }
+
+  topUp(){
+    let navExtras:NavigationExtras={
+      state:{
+        accountNumber:this.Acc_num
+      }
+    }
+    this.router.navigate(['top-up'],navExtras)
   }
 
 }

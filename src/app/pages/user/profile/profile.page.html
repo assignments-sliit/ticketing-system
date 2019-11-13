@@ -46,7 +46,7 @@
     </ion-item>
 
 
-    <ion-button class="ion-float-right" (click)="Profile_update()" padding-top padding-bottom>
+    <ion-button expand="block" class="ion-float-right" (click)="Profile_update()" padding-top padding-bottom>
       <ion-icon name='create' slot="start" class="list-color"></ion-icon>
       Edit profile
     </ion-button>
@@ -79,7 +79,8 @@
       <ion-label>Loan :</ion-label>
       <ion-label>{{loan}}.00 LKR</ion-label>
     </ion-item>
-
+    <ion-button expand="block" (click)="topUp()">
+      Top Up
+    </ion-button>
   </ion-card>
-
 </ion-content>
