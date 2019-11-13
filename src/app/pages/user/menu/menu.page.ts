@@ -14,6 +14,7 @@ export class MenuPage implements OnInit {
 
   imgsrc: string = "https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y";
 
+
   public user_name: any;
   public user_email: any;
   public phone: any;
