@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Loan Top up</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-radio-group [(ngModel)]="payMethod">
+      <ion-list-header>
+        <ion-label>Choose Payment Method</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label>Card</ion-label>
+        <ion-radio slot="start" value="card" checked></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Cash</ion-label>
+        <ion-radio slot="start" value="cash"></ion-radio>
+      </ion-item>
+
+    </ion-radio-group>
+  </ion-list>
+  <ion-button (click)="enterAmount()">
+    Enter Amount
+  </ion-button>
+
+
+  <ion-card *ngIf="showCard">
+
+  </ion-card>
+
+
+  <ion-card *ngIf="showCash">
+    <ion-item>
+      <ion-label>How much you want to top up?</ion-label>
+      <ion-input [(ngModel)]="amount" type="number" placeholder="1000.00"></ion-input>
+    </ion-item>
+    <ion-button (click)="generateCashQr()">
+      Generate QR
+    </ion-button>
+  </ion-card>
+
+  <div *ngIf="qrok">
+    <ngx-qrcode [(qrc-value)]="encodedData">
+
+    </ngx-qrcode>
+  </div>
+</ion-content>
